@@ -1,0 +1,82 @@
+<!-- You cannot use this -->
+<!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
+<script src="/js/popper.min.js" ></script>
+<script src="/js/4.0.0.bootstrap.min.js"></script>
+<script>
+$('.dropdown-menu a.dropdown-toggle').on('click', function(e) {
+  if (!$(this).next().hasClass('show')) {
+    $(this).parents('.dropdown-menu').first().find('.show').removeClass('show');
+  }
+  var $subMenu = $(this).next('.dropdown-menu');
+  $subMenu.toggleClass('show');
+
+
+  $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
+    $('.dropdown-submenu .show').removeClass('show');
+  });
+
+
+  return false;
+});
+function err(s) {
+	alert("We're sorry, but the backend returned an error code while loading data. Please try again later.");
+	console.error("Server responded status " + s + " while sending request to fetch ship info.");
+}
+$("li.m:visible > a").click(function(e) { e.preventDefault(); return false;});
+$("*[a-ship-name]").click(function() {
+	var chParameters = $(this).attr('a-ship-name'); // Eg Amarr/Frigate/Crucifier
+  var num = (chParameters.match(/\//g) || []).length; // Number of /
+	//
+	// ----
+	// menu0: The main menu selection. Eg "Amarr"
+	// menu1: The selected main item class. Eg "Friggate"
+	// menu2: The selected ship name Eg. "Crucifier"
+	//
+	var fields =  {};
+  //
+  // Allows me to add more ships if in deeper categories/sections later.
+  //
+  if( num === 2 ){
+      fields = {
+    			menu0: chParameters.split("/")[0],
+    			menu1: chParameters.split("/")[1],
+    			menu2: chParameters.split("/")[2],
+          menu3: chParameters
+	   };
+  }
+  else
+    throw "Can't determine ship/item type for backend data handling.";
+
+	//
+	// You don't have to use $.ajax for post and get requests unless you need advanced
+	// functionality. Otherwise $.get and $.post will work fine.
+  // Remove the . when not working in BETA.
+  //
+	//
+	$.get({
+		url: "./data/fetch.ejs",
+		dataType: 'text',
+		data: fields,
+	}).fail(function(a,b,c,d){
+		console.log(b);
+		err(a.status);
+	}).done(function(a, b, c){
+		var data = a;
+
+		if( !data || data.length == 0 ) {
+			console.log(c.status);
+
+			err(c.status);
+			return;
+		}
+		//
+		// Server returns text/html which is printed to the page. The container is briefly hidden, then
+		// modified and displayed again.
+    //
+    // Classes always start with a '.'
+		//
+		$("section.container-fluid").fadeOut(100).html(data).fadeIn(100);
+	});
+
+});
+</script>

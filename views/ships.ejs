@@ -1,0 +1,25 @@
+<%- include ('include/clock.ejs') %>
+<html lang="en">
+    <title><%= title %></title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link href="./css/bootstrap.css" rel="stylesheet">
+
+   <body>
+     <head>
+     <script src='./js/jquery-3.4.1.min.js'></script>
+   <div class="jumbotron text-center" style="margin-bottom:30px">
+     <h1>Biscuits Industrial</h1> <h3> Eve Online, Spreadsheets in space </h3>
+   </div>
+   </head>
+<!-- script goes here from mike-->
+<%- include ('./include/shipnavbar.ejs') %>
+<%- include ('./content/announcements.ejs') %>
+<%- include ('./content/ship.ejs') %>
+
+<!-- Footsie for the footer-->
+<%- include ('include/footer.ejs') %>
+<%- include ('include/scripts.ejs') %>
+ </body>
+     </html>

@@ -1,0 +1,32 @@
+<%- include ('clock.ejs') %>
+    <nav class="navbar navbar-inverse navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Home Page</a>
+        </div>
+    
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="ships">Ship Manufacturing <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a></li>
+                    <li class="disabled"><a href="">Citadel Manufacturing <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></li>
+                    <li class="disabled"><a href="">Reprocessing <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></li>
+                    <li class="disabled"><a href="">Ship Fitting <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></li>
+                    <li class="disabled"><a href="">Jump Gate Refuel <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></li>
+                    <li><a href="api">API for Geeks <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+                    <p class="navbar-text"><body onload="updateClock(); setInterval('updateClock()', 1000 )"><a id="clock" style="color:white">&nbsp;</a></p>
+                        <%- include ('loginbar.ejs') %>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    
