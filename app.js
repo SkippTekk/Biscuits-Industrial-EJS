@@ -15,19 +15,12 @@ app.set('views', 'views')
 app.set('view engine', 'ejs')
 
 app.use('/', require('./routes/pages'));
-// app.get('',(req, res) =>{
-//     res.render('index',{title: 'Home Page'})
-// });
 
-// app.get('/about',(req, res) =>{
-//     res.render('about',{title: 'About Biscuits Industrial'})
-// });
-// app.get('/ships',(req, res) =>{
-//     res.render('ships',{title: 'Building ships?'})
-// });
 //leave this at the bottom, it's your error code
 app.use(function(req, res) {
     res.status(400);
    res.render('error/404.ejs', {title: '404: File Not Found'});
    });
+
+// just place the error code up here...
 app.listen(port, () => console.info(`listening on port ` + port))
