@@ -1,3 +1,11 @@
+<script>
+window.onload = function(){
+  setTimeout(function(){
+    var t = performance.timing;
+    console.log(t.loadEventEnd - t.responseEnd);
+  }, 0);
+}
+</script>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -53,7 +61,7 @@
 
 <!-- Footsie for the footer-->
 <%- include ('include/footer.ejs') %>
-	<%- include ('include/bottompagescripts.ejs') %>
+<%- include ('include/bottompagescripts.ejs') %>
 
 
  </body>
