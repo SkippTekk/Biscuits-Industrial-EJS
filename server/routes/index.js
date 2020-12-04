@@ -4,8 +4,8 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
    try{
-    let results = await db.all();
-    res.sendFile(__dirname + '/InvTypes.json');
+    let results = await db.all(req.params.all);
+        res.json(results);
    } catch(e){
        console.log(e);
        res.sendStatus(500);
