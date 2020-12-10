@@ -16,6 +16,10 @@ ut_hour = Math.floor(ut_hour);
 ut_hour = ut_hour%60; 
 ut_min = ut_min%60; 
 ut_sec = ut_sec%60; 
+memoryLeft = os.totalmem();
+memoryFree = memoryLeft*0.000001;
+memoryTotal = os.freemem();
+memorytotal = memoryTotal*0.000001;
 //showing files to the public
 app.get('/',(req, res) =>{
     res.render('index',{title: 'Home Page'})
@@ -25,7 +29,10 @@ app.get('/about',(req, res) =>{
     res.render('about',{
       title: 'About Biscuits Industrial',
       uptime: ut_hour+ " hours " + ut_min +" minutes " + ut_sec + " seconds",
-      load: os.loadavg()
+      load: os.loadavg(),
+      type: os.platform(),
+      memoryTotal: Math.floor(memoryFree),
+      memoryLeft: Math.floor(memorytotal)
     })
 });
 app.get('/ships', (req, res, next ) => {
