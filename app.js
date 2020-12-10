@@ -16,11 +16,20 @@ app.set('view engine', 'ejs')
 
 app.use('/', require('./routes/pages'));
 
-//leave this at the bottom, it's your error code
-app.use(function(req, res) {
-    res.status(400);
-   res.render('error/404.ejs', {title: '404: File Not Found'});
-   });
+//error handling like 404, but sadly it's fucking BROKEN as usual
 
-// just place the error code up here...
+
+// app.use(function(req, res) {
+//   res.status(400);
+//  res.render('error/404.ejs', {title: '404: File Not Found'});
+//  });
+app.use(function(req,res){
+    res.status(404)
+    res.render('error/404')
+});
+
+
+//os info
+
+
 app.listen(port, () => console.info(`listening on port ` + port))

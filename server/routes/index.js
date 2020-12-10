@@ -31,7 +31,7 @@ router.get('/i/:id', async (req, res, next) => {
  });
  router.get('/b/:builds', async (req, res, next) => {
     try{
-     let results = await db.builds(`${req.params.builds} blueprint`);
+     let results = await db.builds(req.params.builds + ` blueprint`);
      res.json(results);
     } catch(e){
         console.log(e);
