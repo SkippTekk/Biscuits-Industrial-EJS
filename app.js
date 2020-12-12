@@ -29,7 +29,4 @@ app.use(function(req,res){
 });
 
 
-//os info
-
-
 app.listen(port, () => console.info(`listening on port ` + port))

@@ -35,8 +35,15 @@ app.get('/about',(req, res) =>{
       memoryLeft: Math.floor(memorytotal)
     })
 });
-app.get('/ships', (req, res, next ) => {
-    res.render('ships',{title: 'Building ships?'})
+app.get('/ships/:id', (req, res) => {
+    res.render('ships',{
+      title: 'Building ships?',
+      power: mysql.query('SELECT * FROM invTypes WHERE typeName = ?', req.params.id, function(err, results){
+        if(err || !results.length) {
+          console.log('something broke');
+        }
+      })
+    })
     
 });
 app.use('/auth', require('../routes/auth'));
