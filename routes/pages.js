@@ -44,14 +44,14 @@ app.get('/about',(req, res) =>{
     })
 });
 app.get('/ships/:id', (req, res) => {
-    res.render('content/shipinformation',{
+    res.render('shipinformation',{
       title: 'Building ships?',
         power: connect.query('SELECT capacity FROM invTypes WHERE typeName = ?', req.params.id, function(err, results){
           if(err){
             return console.err(err.message);
           } else {
             console.log(results);
-            return JSON.stringify(results);
+            return results;
           }
           
       })
