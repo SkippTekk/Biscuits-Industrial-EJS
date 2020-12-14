@@ -23,7 +23,7 @@
                 <img class="media-object" target="__blank" src='https://images.evetech.net/types/<%= typeid %>/render' style="max-width: 100%; max-height: 100%;" alt='Ship Image goes Here, Mail SkippTekk or tweet @XGKIPPY for a fix'>
               </a>
               <h4 class="media-heading">Default values of the ship.</h4>
-              <p>Ship Capacity: <%= capacity %>
+              <p>Ship Capacity: <%= capacity.toFixed(0) %>
               <p>Ship Mass: <%- mass %>
               <p>Ship Volume: <%- volume %>
               <p> Group ID: <%- groupid %>
@@ -83,14 +83,15 @@
           </div>
           <p></p>
           <table class="table">
-
+            <% for(var i = 0; i < MINERALS.length; i++) { %>
           <tbody>
           <tr>
-          <td><img src='https://images.evetech.net/types/22/icon'><a href="http://eve.wikia.com/wiki/Arkonor" target="_blank">" . $row['typeName'] . "</a></td>
-          <td>".number_format((max(1, ceil($row['quantity']*(1-$ME*0.01)*$structureBase*(1-$rigBonus))))*$Build)."</td>
-          <td>".number_format((max(1, ceil($row['quantity']*(1-$ME*0.01)*$structureEngineering*(1-$rigBonus))))*$Build)."</td>
-          <td>".number_format((max(1, ceil($row['quantity']*(1-$ME*0.01)*$structureRefining*(1-$rigBonus))))*$Build)."</td>
+          <td><img src='https://images.evetech.net/types/<%= MINERALS[i].materialTypeID  %>/icon'><a href="http://eve.wikia.com/wiki/<%= MINERALS[i].typeName %>" target="_blank"><%= MINERALS[i].typeName %></a></td>
+          <td>".number_format((max(1, ceil(<%= MINERALS[i].quantity  %>*(1-$ME*0.01)*$structureBase*(1-$rigBonus))))*$Build)."</td>
+          <td>".number_format((max(1, ceil(<%= MINERALS[i].quantity  %>*(1-$ME*0.01)*$structureEngineering*(1-$rigBonus))))*$Build)."</td>
+          <td>".number_format((max(1, ceil(<%= MINERALS[i].quantity  %>*(1-$ME*0.01)*$structureRefining*(1-$rigBonus))))*$Build)."</td>
           </tr>
+          <% } %>
           </tbody>
             <table class="table">
           <th>Compressed Ore</th>
