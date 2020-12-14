@@ -44,15 +44,20 @@ app.get('/about',(req, res) =>{
     })
 });
 app.get('/ships/:id', (req, res) => {
+  connect.query('SELECT * FROM invTypes WHERE typeName = ?', req.params.id, function(err, results){
     res.render('shipinformation',{
-      title: 'Building ships?',
-        power: connect.query('SELECT capacity FROM invTypes WHERE typeName = ?', req.params.id, function(err, results){
-          if(err){
-            return console.err(err.message);
-          } else {
-            console.log(results);
-            return results;
-          }
+        title: 'Building ships?',
+        typeid: results[0].typeID,
+        groupid: results[0].groupID,
+        typename: results[0].typeName,
+        description: results[0].description,
+        mass: results[0].mass,
+        volume: results[0].volume,
+        capacity: results[0].capacity,
+        portionSize: results[0].portionSize,
+        raceID: results[0].raceID,
+        graphicID: results[0].graphicID,
+
           
       })
     })

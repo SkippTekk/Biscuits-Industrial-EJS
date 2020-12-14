@@ -1,5 +1,5 @@
 <html lang="en">
-    <title>Biscuits Industrial</title>
+    <title><% title %></title>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -20,19 +20,19 @@
         <div class="col-md-3 leftNav">
           <div class="media">
             <div class="media-left">
-              <a href="https://wiki.eveuniversity.org/ target="_blank"">
-                <img class="media-object" src='https://images.evetech.net/types/" . $ShipInformation['typeID'] . "/render' style="max-width: 100%; max-height: 100%;" alt='Ship Image goes Here, Mail SkippTekk or tweet @XGKIPPY for a fix'>
+              <a href="https://wiki.eveuniversity.org/" target="__blank">
+                <img class="media-object" target="__blank" src='https://images.evetech.net/types/<%- typeid %>/render' style="max-width: 100%; max-height: 100%;" alt='Ship Image goes Here, Mail SkippTekk or tweet @XGKIPPY for a fix'>
               </a>
               <h4 class="media-heading">Default values of the ship.</h4>
-              <p>Ship Power: <%- power %>
-              <p>Ship Mass: ".number_format($ShipInformation['mass'])."
-              <p>Ship Volume: ".number_format($ShipInformation['volume'])."
-              <p> Testing: ".$ShipVarient['Info']['groupID']."
+              <p>Ship Capacity: <%= capacity %>
+              <p>Ship Mass: <%- mass %>
+              <p>Ship Volume: <%- volume %>
+              <p> Group ID: <%- groupid %>
             </div>
           </div>
         </div>
         <div class="col-md-6 content">
-          <h1>".$ShipInformation['typeName']." ID: " . $ShipInformation['typeID'] . "</h1>
+          <h1><%= typename %> ID: <%- typeid %></h1>
           Ship Tree Location:<p>" . $fields['__m1'] . "->" . $fields['__m2'] . " -> ".$fields['__m3']."
 
           <div class="Rigs" style="text-align:center;">
@@ -135,7 +135,7 @@ echo "This is Null";
         <div class="col-md-3 reletedContent">
         </a>
         <b>Ship Description and Data</b>:<p>
-        " . $ShipInformation['description'] . "
+        <%- description %>
         </div>
     </div>
 </section>");
