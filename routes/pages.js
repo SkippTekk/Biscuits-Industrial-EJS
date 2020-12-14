@@ -1,10 +1,18 @@
 const express = require('express');
 const app = express.Router();
 //const bcrypt = require('bcrypt');
-const mysql = require('../server/index');
+const mysql = require('mysql')
+const connect = mysql.createConnection({
+    password: process.env.MYSQL_PASS,
+    user: process.env.MYSQL_USER,
+    database: process.env.MYSQL_DB,
+    host: process.env.MYSQL_HOST,
+    charset: 'utf8mb4_bin'
+})
 
 // OS information
 const os = require('os');
+const { callbackify } = require('util');
 
 var ut_sec = os.uptime(); 
 var ut_min = ut_sec/60; 
@@ -36,16 +44,19 @@ app.get('/about',(req, res) =>{
     })
 });
 app.get('/ships/:id', (req, res) => {
-    res.render('ships',{
+    res.render('content/shipinformation',{
       title: 'Building ships?',
-      power: mysql.query('SELECT * FROM invTypes WHERE typeName = ?', req.params.id, function(err, results){
-        if(err || !results.length) {
-          console.log('something broke');
-        }
+        power: connect.query('SELECT capacity FROM invTypes WHERE typeName = ?', req.params.id, function(err, results){
+          if(err){
+            return console.err(err.message);
+          } else {
+            console.log(results);
+            return JSON.stringify(results);
+          }
+          
       })
     })
-    
-});
+  });
 app.use('/auth', require('../routes/auth'));
 
 app.get('/login', (req, res) => {
