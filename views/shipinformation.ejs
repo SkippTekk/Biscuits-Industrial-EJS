@@ -1,10 +1,9 @@
 <html lang="en">
-    <title><% title %></title>
+    <title><%= title %></title>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link href="../css/bootstrap.css" rel="stylesheet">
-
    <body>
      <head>
      <script src='../js/jquery-3.4.1.min.js'></script>
@@ -21,13 +20,27 @@
           <div class="media">
             <div class="media-left">
               <a href="https://wiki.eveuniversity.org/" target="__blank">
-                <img class="media-object" target="__blank" src='https://images.evetech.net/types/<%- typeid %>/render' style="max-width: 100%; max-height: 100%;" alt='Ship Image goes Here, Mail SkippTekk or tweet @XGKIPPY for a fix'>
+                <img class="media-object" target="__blank" src='https://images.evetech.net/types/<%= typeid %>/render' style="max-width: 100%; max-height: 100%;" alt='Ship Image goes Here, Mail SkippTekk or tweet @XGKIPPY for a fix'>
               </a>
               <h4 class="media-heading">Default values of the ship.</h4>
               <p>Ship Capacity: <%= capacity %>
               <p>Ship Mass: <%- mass %>
               <p>Ship Volume: <%- volume %>
               <p> Group ID: <%- groupid %>
+              <p>Race BROKEN on faction: 
+                <% if (raceID === 1) {%>
+                  Caldari State
+                <%} else if (raceID === 2) {%>
+                  Minmatar Republic
+                <%} else if (raceID === 4) {%>
+                  Amarr Empire
+                <%} else if (raceID === 8) {%>
+                  Gallante Federation
+                <%} else if (raceID === 16) {%>
+                  Jove
+                <%} else if (raceID === 128) {%>
+                  Ore
+                <% } %>
             </div>
           </div>
         </div>
@@ -36,7 +49,7 @@
           Ship Tree Location:<p>" . $fields['__m1'] . "->" . $fields['__m2'] . " -> ".$fields['__m3']."
 
           <div class="Rigs" style="text-align:center;">
-          <div class="SliderUi" style="">
+          <div class="SliderUi" >
           <label for="minval">Blueprint Material Efficiency Level(0-10): <input class="BPODrop" type='number' min='0' max='10'></label>
           <label for="minval">How many ships are being built: <select name='ShipDrop' class="ShipDrop"></select></label>
           </div><br>
@@ -68,65 +81,46 @@
           </select>
           </fieldset>
           </div>
+          <p></p>
           <table class="table">
-          <thead>
-          <tr>");
-if (id == high) {
-echo "This is High";
-} elseif (id == low){
-echo "This is low";
-} elseif (id == nullwh){
-echo "This is Null";
-}
 
-
-          echo ("<th>Minerals</th>
-          <th>Citadel</th>
-          <th>Engineering</th>
-          <th>Refining</th>
-          </tr>
-          </thead>");
-          while ($row = $q->fetch()): {
-          echo ("
           <tbody>
           <tr>
-          <td><img src='https://images.evetech.net/types/" . $row['materialTypeID'] . "/icon'><a href="http://eve.wikia.com/wiki/" . $row['typeName'] . "" target="_blank">" . $row['typeName'] . "</a></td>
+          <td><img src='https://images.evetech.net/types/22/icon'><a href="http://eve.wikia.com/wiki/Arkonor" target="_blank">" . $row['typeName'] . "</a></td>
           <td>".number_format((max(1, ceil($row['quantity']*(1-$ME*0.01)*$structureBase*(1-$rigBonus))))*$Build)."</td>
           <td>".number_format((max(1, ceil($row['quantity']*(1-$ME*0.01)*$structureEngineering*(1-$rigBonus))))*$Build)."</td>
           <td>".number_format((max(1, ceil($row['quantity']*(1-$ME*0.01)*$structureRefining*(1-$rigBonus))))*$Build)."</td>
           </tr>
-          </tbody>");
-          } endwhile;
-          echo("
+          </tbody>
             <table class="table">
           <th>Compressed Ore</th>
           <th>Ore Count</th>
           <tr>
-          <td><img src='https://images.evetech.net/types/" . $Arkonor . "/icon'><a href="http://eve.wikia.com/wiki/Arkonor" target="_blank">Arkonor</a></td>
+          <td><img src='https://images.evetech.net/types/28367/icon'><a href="http://eve.wikia.com/wiki/Arkonor" target="_blank">Compressed Arkonor</a></td>
           <td>Math goes here</td>
           </tr>
           <tr>
-          <td><img src='https://images.evetech.net/types/" . $Bistot . "/icon'><a href="http://eve.wikia.com/wiki/Bistot" target="_blank">Bistot</a></td>
+          <td><img src='https://images.evetech.net/types/28388/icon'><a href="http://eve.wikia.com/wiki/Bistot" target="_blank">Compressed Bistot</a></td>
           <td>Moon shit here</td>
 
           </tr>
           <tr>
-          <td><img src='https://images.evetech.net/types/" . $Crokite . "/icon'><a href="http://eve.wikia.com/wiki/Crokite" target="_blank">Crokite</a></td>
+          <td><img src='https://images.evetech.net/types/28391/icon'><a href="http://eve.wikia.com/wiki/Crokite" target="_blank">Compressed Crokite</a></td>
           <td>Moon shit here</td>
 
           </tr>
           <tr>
-          <td><img src='https://images.evetech.net/types/" . $Gneiss . "/icon'><a href="http://eve.wikia.com/wiki/Gneiss" target="_blank">Gneiss</a></td>
+          <td><img src='https://images.evetech.net/types/28397/icon'><a href="http://eve.wikia.com/wiki/Gneiss" target="_blank">Compressed Gneiss</a></td>
           <td>Moon shit here</td>
 
           </tr>
           <tr>
-          <td><img src='https://images.evetech.net/types/" . $Spodumain . "/icon'><a href="http://eve.wikia.com/wiki/Spodumain" target="_blank">Spodumain</a></td>
+          <td><img src='https://images.evetech.net/types/28420/icon'><a href="http://eve.wikia.com/wiki/Spodumain" target="_blank">Spodumain</a></td>
           <td>Moon shit here</td>
 
           </tr>
           <tr>
-          <td><img src='https://images.evetech.net/types/" . $Ochre . "/icon'><a href="http://eve.wikia.com/wiki/Ochre" target="_blank">Ochre</a></td>
+          <td><img src='https://images.evetech.net/types/28394/icon'><a href="http://eve.wikia.com/wiki/Dark Ochre" target="_blank">Compressed Dark Ochre</a></td>
           <td>Moon shit here</td>
 
           </tr>
@@ -138,7 +132,7 @@ echo "This is Null";
         <%- description %>
         </div>
     </div>
-</section>");
+</section>
 
 <!-- Footsie for the footer-->
 <%- include ('include/footer.ejs') %>

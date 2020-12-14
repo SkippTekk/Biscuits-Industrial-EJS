@@ -44,23 +44,29 @@ app.get('/about',(req, res) =>{
     })
 });
 app.get('/ships/:id', (req, res) => {
-  connect.query('SELECT * FROM invTypes WHERE typeName = ?', req.params.id, function(err, results){
-    res.render('shipinformation',{
-        title: 'Building ships?',
-        typeid: results[0].typeID,
-        groupid: results[0].groupID,
-        typename: results[0].typeName,
-        description: results[0].description,
-        mass: results[0].mass,
-        volume: results[0].volume,
-        capacity: results[0].capacity,
-        portionSize: results[0].portionSize,
-        raceID: results[0].raceID,
-        graphicID: results[0].graphicID,
+  connect.query('SELECT * FROM invTypes WHERE typeName = ?', req.params.id, function(err1, results1){
+    connect.query('SELECT m.materialTypeID, m.quantity, i2.typeName, m.activityID FROM industryActivityMaterials m INNER JOIN invTypes i1 ON i1.typeID = m.typeID INNER JOIN invTypes i2 ON i2.typeID = m.materialtypeID INNER JOIN ramActivities i3 ON i3.activityID = m.activityID = 1 WHERE i1.typeName = ? AND m.activityID = 1 ORDER BY `m`.`materialTypeID` ASC', req.params.id.toString() + " blueprint", function(err2, results2){
+      res.render('shipinformation',{
+          title: 'Building ships?',
+          typeid: results1[0].typeID,
+          groupid: results1[0].groupID,
+          typename: results1[0].typeName,
+          description: results1[0].description,
+          mass: results1[0].mass,
+          volume: results1[0].volume,
+          capacity: results1[0].capacity,
+          portionSize: results1[0].portionSize,
+          raceID: results1[0].raceID,
+          graphicID: results1[0].graphicID,
+          Arkonor: results1[0].Arkonor,
+          materialTypeID: results2[0].materialTypeID,
+          quantity: results2[0].quantity,
+          typeName: results2[0].typeName,
 
-          
-      })
-    })
+        })
+        console.log(results2)
+          })  
+            })
   });
 app.use('/auth', require('../routes/auth'));
 
