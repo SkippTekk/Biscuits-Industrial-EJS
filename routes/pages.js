@@ -62,8 +62,6 @@ app.get('/ships/:id', (req, res) => {
                 
                 MINERALS: results2
             });
-            console.log(Intl.NumberFormat((Math.max(1, Math.ceil( results2 *(1-10*0.01)*.99*(1-0))))*1))
-            console.log(err)
         })  
     })
 });

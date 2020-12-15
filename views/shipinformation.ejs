@@ -12,7 +12,7 @@
    </div>
    </head>
 <!-- script goes here from mike-->
-<%- include ('include/shipnavbar.ejs') %>
+<%- include ('include/shipsnavbar.ejs') %>
 <%- include ('content/announcements.ejs') %>
 <section class="container-fluid" >
     <div class="row">
@@ -94,9 +94,10 @@
           <tbody>
           <tr>
           <td><img src='https://images.evetech.net/types/<%= MINERALS[i].materialTypeID  %>/icon'><a href="http://eve.wikia.com/wiki/<%= MINERALS[i].typeName %>" target="_blank"><%= MINERALS[i].typeName %></a></td>
-          <td><%- Intl.NumberFormat((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-10*0.01)*.99*(1-0))))*1)%></td>
-          <td>".number_format((max(1, ceil(<%= MINERALS[i].quantity  %>*(1-$ME*0.01)*$structureEngineering*(1-$rigBonus))))*$Build)."</td>
-          <td>".number_format((max(1, ceil(<%= MINERALS[i].quantity  %>*(1-$ME*0.01)*$structureRefining*(1-$rigBonus))))*$Build)."</td>
+          <!-- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-$ME*0.01)*$structureEngineering*(1-$rigBonus))))*$Build) -->
+          <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-1*0.01)*1*(1-0))))*1) %></td>
+          <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-1*0.01)*.99*(1-0))))*1)%></td>
+          <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-1*0.01)*.98*(1-0))))*1)%></td>
           </tr>
           <% } %>
           </tbody>
