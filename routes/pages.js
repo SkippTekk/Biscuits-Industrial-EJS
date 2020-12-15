@@ -59,10 +59,11 @@ app.get('/ships/:id', (req, res) => {
                 portionSize: results1[0].portionSize,
                 raceID: results1[0].raceID,
                 graphicID: results1[0].graphicID,
-                Arkonor: results1[0].Arkonor,
                 
                 MINERALS: results2
             });
+            console.log(Intl.NumberFormat((Math.max(1, Math.ceil( results2 *(1-10*0.01)*.99*(1-0))))*1))
+            console.log(err)
         })  
     })
 });
