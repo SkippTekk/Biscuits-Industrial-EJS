@@ -50,12 +50,29 @@
 
           <div class="Rigs" style="text-align:center;">
           <div class="SliderUi" >
-          <label for="minval">Blueprint Material Efficiency Level(0-10): <input class="BPODrop" type='number' min='0' max='10'></label>
-          <label for="minval">How many ships are being built: <select name='ShipDrop' class="ShipDrop"></select></label>
+            <form id="selectpicker" action="/ships" method="GET">
+          <fieldset>
+            <legend>What's your ME BPO number </legend>
+            <select id="bpo">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </form>
+            </fieldset>
+          <label for="minval">How many ships are being built:<p></p> <select name='ShipDrop' class="ShipDrop"></select></label>
           </div><br>
           <fieldset>
           <legend>Select your Rig (not working)</legend>
-          <select>
+          <select id="rig">
           <option value="noRig">No Rig</option>
           <option value="Tech1">Tech 1</option>
           <option value="Tech2">Tech 2</option>
@@ -63,22 +80,40 @@
           </fieldset>
           <fieldset>
           <legend>Select your Location </legend>
-          <select id="selectMe">
+          <select id="location">
             <option value="high">Highsec</option>
             <option value="low">Lowsec</option>
             <option value="nullwh">NullSec/WH</option>
           </select>
           </fieldset>
-          </div>
-          <div class="Rigs" style="text-align:center;">
           <fieldset>
           <h1><legend>Ore Bonus Varient (not working)</legend></h1>
-          <select name="Variend" id="Varient">
+          <select name="Variend" id="bonus">
           <option value="0">0%</option>
           <option value="1">5%</option>
           <option value="2">10%</option>
           <option value="3">15%</option>
           </select>
+          <script type="text/javascript">
+            $(function () {
+              $("#bpo").change(function() {
+                var ME = $(this).val();
+                console.log(ME)
+              })
+              $("#rig").change(function() {
+                var RIG = $(this).val();
+                console.log(RIG)
+              })
+              $("#location").change(function() {
+                var location = $(this).val();
+                console.log(location)
+              })
+              $("#bonus").change(function() {
+                var ORE = $(this).val();
+                console.log(ORE)
+              })
+            })
+          </script>
           </fieldset>
           </div>
           <p></p>
@@ -95,9 +130,9 @@
           <tr>
           <td><img src='https://images.evetech.net/types/<%= MINERALS[i].materialTypeID  %>/icon'><a href="http://eve.wikia.com/wiki/<%= MINERALS[i].typeName %>" target="_blank"><%= MINERALS[i].typeName %></a></td>
           <!-- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-$ME*0.01)*$structureEngineering*(1-$rigBonus))))*$Build) -->
-          <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-1*0.01)*1*(1-0))))*1) %></td>
-          <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-1*0.01)*.99*(1-0))))*1)%></td>
-          <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-1*0.01)*.98*(1-0))))*1)%></td>
+          <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-0*0.01)*1*(1-0))))*1) %></td>
+          <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-0*0.01)*.99*(1-0))))*1)%></td>
+          <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-0*0.01)*.98*(1-0))))*1)%></td>
           </tr>
           <% } %>
           </tbody>
@@ -124,7 +159,7 @@
 
           </tr>
           <tr>
-          <td><img src='https://images.evetech.net/types/28420/icon'><a href="http://eve.wikia.com/wiki/Spodumain" target="_blank">Spodumain</a></td>
+          <td><img src='https://images.evetech.net/types/28420/icon'><a href="http://eve.wikia.com/wiki/Spodumain" target="_blank">Compressed Spodumain</a></td>
           <td>Moon shit here</td>
 
           </tr>

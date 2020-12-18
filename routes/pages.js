@@ -43,10 +43,9 @@ app.get('/about',(req, res) =>{
       memoryLeft: Math.floor(memorytotal)
     })
 });
-app.get('/ships/:id', (req, res) => {
-
-  connect.query('SELECT * FROM invTypes WHERE typeName = ?', [req.params.id], function(err, results1){
-    connect.query('SELECT m.materialTypeID, m.quantity, i2.typeName, m.activityID FROM industryActivityMaterials m INNER JOIN invTypes i1 ON i1.typeID = m.typeID INNER JOIN invTypes i2 ON i2.typeID = m.materialtypeID INNER JOIN ramActivities i3 ON i3.activityID = m.activityID = 1 WHERE i1.typeName = ? AND m.activityID = 1 ORDER BY `m`.`materialTypeID` ASC', [req.params.id + ' blueprint'], function(err, results2){            
+app.get('/ships/:ship', (req, res) => {
+  connect.query('SELECT * FROM invTypes WHERE typeName = ?', [req.params.ship], function(err, results1){
+    connect.query('SELECT m.materialTypeID, m.quantity, i2.typeName, m.activityID FROM industryActivityMaterials m INNER JOIN invTypes i1 ON i1.typeID = m.typeID INNER JOIN invTypes i2 ON i2.typeID = m.materialtypeID INNER JOIN ramActivities i3 ON i3.activityID = m.activityID = 1 WHERE i1.typeName = ? AND m.activityID = 1 ORDER BY `m`.`materialTypeID` ASC', [req.params.ship + ' blueprint'], function(err, results2){            
             res.render('shipinformation', {
                 title: 'Building ships?',
                 typeid: results1[0].typeID,
@@ -60,7 +59,7 @@ app.get('/ships/:id', (req, res) => {
                 raceID: results1[0].raceID,
                 graphicID: results1[0].graphicID,
                 
-                MINERALS: results2
+                MINERALS: results2                
             });
         })  
     })
