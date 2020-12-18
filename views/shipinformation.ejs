@@ -54,17 +54,14 @@
           <fieldset>
             <legend>What's your ME BPO number </legend>
             <select id="bpo">
-              <option value="0">0</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
+              <% 
+                var options = ["0","1","2","3","4","5","6","7","8","9","10"];
+                for (var i= 0; i < options.length; i++)
+                {
+                  var ME = (options[0].bpo == i) ? "selected" : "";
+                  %><option value"<%=options[i]%>" <%=ME %>><%=i %></options><%
+                }
+              %> 
             </select>
           </form>
             </fieldset>
@@ -130,7 +127,7 @@
           <tr>
           <td><img src='https://images.evetech.net/types/<%= MINERALS[i].materialTypeID  %>/icon'><a href="http://eve.wikia.com/wiki/<%= MINERALS[i].typeName %>" target="_blank"><%= MINERALS[i].typeName %></a></td>
           <!-- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-$ME*0.01)*$structureEngineering*(1-$rigBonus))))*$Build) -->
-          <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-0*0.01)*1*(1-0))))*1) %></td>
+          <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-ME*0.01)*1*(1-0))))*1) %></td>
           <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-0*0.01)*.99*(1-0))))*1)%></td>
           <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-0*0.01)*.98*(1-0))))*1)%></td>
           </tr>
