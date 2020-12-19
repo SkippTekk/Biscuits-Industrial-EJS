@@ -37,7 +37,7 @@ const db = mysql.createPool({
 
             const cookieOptions = {
                 expires: new Date(
-                    Date.now() + process.env.JWT_COOKE_EXPIRE * 60 * 5
+                    Date.now() + process.env.JWT_COOKIE_EXPIRE * 60 * 5
                 ),
                 httpOnly: true
             }

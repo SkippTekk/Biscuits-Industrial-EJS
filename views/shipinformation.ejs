@@ -50,7 +50,7 @@
 
           <div class="Rigs" style="text-align:center;">
           <div class="SliderUi" >
-            <form id="selectpicker" action="/ships" method="GET">
+            <form id="selectpicker" action="/ships" method="post">
           <fieldset>
             <legend>What's your ME BPO number </legend>
             <select id="bpo">
@@ -92,10 +92,21 @@
           <option value="3">15%</option>
           </select>
           <script type="text/javascript">
-            $(function () {
+            $(document).ready(function(){
+              var minerals = <%- JSON.stringify(MINERALS) %>;
               $("#bpo").change(function() {
-                var ME = $(this).val();
-                console.log(ME)
+                var ME = Number($(this).val());
+                var count = Object.keys(minerals).length;
+
+                for(var x = 0; x < count; x++) { 
+                  var id = x;
+                  $v = $(`#o${id}`);
+
+                  $v.find(`.c1`).html((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*1*(1-0))))*1);
+                  $v.find(`.c2`).html((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*.99*(1-0))))*1);
+                  $v.find(`.c3`).html((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*.98*(1-0))))*1);
+                }
+
               })
               $("#rig").change(function() {
                 var RIG = $(this).val();
@@ -109,7 +120,7 @@
                 var ORE = $(this).val();
                 console.log(ORE)
               })
-            })
+            });
           </script>
           </fieldset>
           </div>
@@ -124,12 +135,13 @@
           </thead>
             <% for(var i = 0; i < MINERALS.length; i++) { %>
           <tbody>
-          <tr>
+          <tr id="<%= "o" + i.toString() %>">
           <td><img src='https://images.evetech.net/types/<%= MINERALS[i].materialTypeID  %>/icon'><a href="http://eve.wikia.com/wiki/<%= MINERALS[i].typeName %>" target="_blank"><%= MINERALS[i].typeName %></a></td>
           <!-- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-$ME*0.01)*$structureEngineering*(1-$rigBonus))))*$Build) -->
-          <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-ME*0.01)*1*(1-0))))*1) %></td>
-          <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-0*0.01)*.99*(1-0))))*1)%></td>
-          <td><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-0*0.01)*.98*(1-0))))*1)%></td>
+
+          <td class="c1"><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-ME*0.01)*1*(1-0))))*1) %></td>
+          <td class="c2"><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-0*0.01)*.99*(1-0))))*1)%></td>
+          <td class="c3"><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-0*0.01)*.98*(1-0))))*1)%></td>
           </tr>
           <% } %>
           </tbody>
