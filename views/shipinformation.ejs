@@ -58,7 +58,7 @@
                 var options = ["0","1","2","3","4","5","6","7","8","9","10"];
                 for (var i= 0; i < options.length; i++)
                 {
-                  var ME = (options[0].bpo == i) ? "selected" : "";
+                  var ME = (options[0].bpo == i);
                   %><option value"<%=options[i]%>" <%=ME %>><%=i %></options><%
                 }
               %> 
@@ -94,32 +94,33 @@
           <script type="text/javascript">
             $(document).ready(function(){
               var minerals = <%- JSON.stringify(MINERALS) %>;
-              $("#bpo").change(function() {
-                var ME = Number($(this).val());
-                var count = Object.keys(minerals).length;
+                $("#bpo").change(function() {
+                  var ME = Number($(this).val());
+                  var count = Object.keys(minerals).length;
+                
+                  $("#rig").change(function() {
+                    var RIG = $(this).val();
+                    console.log(RIG)
+              
+                    $("#location").change(function() {
+                      var location = $(this).val();
+                      console.log(location)
+              
+                      $("#bonus").change(function() {
+                        var ORE = $(this).val();
+                        console.log(ORE)
+                      })
+                    })
+                  })
+                    for(var x = 0; x < count; x++) { 
+                            var id = x;
+                            $v = $(`#o${id}`);
 
-                for(var x = 0; x < count; x++) { 
-                  var id = x;
-                  $v = $(`#o${id}`);
-
-                  $v.find(`.c1`).html(Intl.NumberFormat().format((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*1*(1-0))))*1));
-                  $v.find(`.c2`).html(Intl.NumberFormat().format((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*.99*(1-0))))*1));
-                  $v.find(`.c3`).html(Intl.NumberFormat().format((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*.98*(1-0))))*1));
-                }
-
-              })
-              $("#rig").change(function() {
-                var RIG = $(this).val();
-                console.log(RIG)
-              })
-              $("#location").change(function() {
-                var location = $(this).val();
-                console.log(location)
-              })
-              $("#bonus").change(function() {
-                var ORE = $(this).val();
-                console.log(ORE)
-              })
+                            $v.find(`.c1`).html(Intl.NumberFormat().format((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*1*(1-0))))*1));
+                            $v.find(`.c2`).html(Intl.NumberFormat().format((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*.99*(1-0))))*1));
+                            $v.find(`.c3`).html(Intl.NumberFormat().format((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*.98*(1-0))))*1));
+                          }
+                  })
             });
           </script>
           </fieldset>
