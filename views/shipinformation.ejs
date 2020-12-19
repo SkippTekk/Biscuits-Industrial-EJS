@@ -102,9 +102,9 @@
                   var id = x;
                   $v = $(`#o${id}`);
 
-                  $v.find(`.c1`).html((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*1*(1-0))))*1);
-                  $v.find(`.c2`).html((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*.99*(1-0))))*1);
-                  $v.find(`.c3`).html((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*.98*(1-0))))*1);
+                  $v.find(`.c1`).html(Intl.NumberFormat().format((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*1*(1-0))))*1));
+                  $v.find(`.c2`).html(Intl.NumberFormat().format((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*.99*(1-0))))*1));
+                  $v.find(`.c3`).html(Intl.NumberFormat().format((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*.98*(1-0))))*1));
                 }
 
               })
