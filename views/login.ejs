@@ -1,1 +1,65 @@
-Work in progress
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://skipptekk.com">
+    <meta property="og:title" content="Biscuits Industrial Spreadsheets In Space">
+    <meta property="og:description" content="A fan made project for Eve Online! Help support the project with the Patron! https://www.patreon.com/bePatron?u=178136">
+    <meta property="og:image" content="https://images.evetech.net/characters/95046472/portrait">
+
+<title><%= title %></title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <script src='js/jquery-3.4.1.min.js'></script>
+</head>
+   <body>
+   <div class="jumbotron text-center" style="margin-bottom:30px">
+     <h1>Biscuits Industrial</h1> <h3> Eve Online, Spreadsheets in space </h3>
+   </div>
+
+<%- include ('include/indexnavbar') %>
+<%- include ('content/announcements') %>
+<header class="container">
+
+    </header>
+    <section class="container-fluid" >
+        <div class="row">
+            <%- include ('include/discordwidget.ejs') %>
+            <div class="col-md-6 content">
+                <form action="/auth/login" method="POST">
+                    <div class="form-group">
+                        <label for="email" class="text-center"></label>
+                        <input type="email" class="form-control" id="email" placeholder="Email goes here" name="email">
+                        <small id="emailHelp" class="form-text text-muted">This is where you place your email to login.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="password"></label>
+                        <input type="password" class="form-control" id="password" placeholder="Password goes here" name="password">
+                        <small id="emailHelp" class="form-text text-muted">Gimme your password. I highly recommend using LastPass to generate it. Harder for people to "hack" into</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+            </div> 
+            <div class="col-md-3 reletedContent">
+            <div class="media">
+                    <div class="media-left">
+                    <h4 class="media-heading">I Like Biscuits.</h4>
+                      <a href="https://evewho.com/pilot/I+like+biscuits" target="_blank">
+                        <img class="media-object" src='https://images.evetech.net/characters/95046472/portrait' style="max-width: 100%; max-height: 100%;" alt='Ship Image goes Here, Mail SkippTekk or tweet @XGKIPPY for a fix'>
+                      </a>
+                      
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Footsie for the footer-->
+<%- include ('include/footer.ejs') %>
+<%- include ('include/bottompagescripts.ejs') %>
+
+
+ </body>
+     </html>

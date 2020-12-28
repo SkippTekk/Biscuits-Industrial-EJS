@@ -39,3 +39,7 @@ Modules used so far
 
 [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 ``npm i bcryptjs --save``
+
+[esiil](https://www.npmjs.com/package/esiil)
+``npm i esiil --save `` 
+Also made by a contributer of the project. Karnthis

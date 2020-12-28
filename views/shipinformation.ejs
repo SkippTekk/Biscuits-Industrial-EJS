@@ -75,7 +75,7 @@
           <fieldset>
           <legend>Select your Rig (not working)</legend>
           <select id="rig">
-          <option value="noRig">No Rig</option>
+          <option value="0">No Rig</option>
           <option value="Tech1">Tech 1</option>
           <option value="Tech2">Tech 2</option>
           </select>
@@ -83,7 +83,7 @@
           <fieldset>
           <legend>Select your Location </legend>
           <select id="location">
-            <option value="high">Highsec</option>
+            <option value=".99">Highsec</option>
             <option value="low">Lowsec</option>
             <option value="nullwh">NullSec/WH</option>
           </select>
@@ -146,8 +146,8 @@
           <!-- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-$ME*0.01)*$structureEngineering*(1-$rigBonus))))*$Build) -->
 
           <td class="c1"><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-ME*0.01)*1*(1-0))))*1) %></td>
-          <td class="c2"><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-0*0.01)*.99*(1-0))))*1)%></td>
-          <td class="c3"><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-0*0.01)*.98*(1-0))))*1)%></td>
+          <td class="c2"><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-ME*0.01)*.99*(1-0))))*1)%></td>
+          <td class="c3"><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-ME*0.01)*.98*(1-0))))*1)%></td>
           </tr>
           <% } %>
           </tbody>

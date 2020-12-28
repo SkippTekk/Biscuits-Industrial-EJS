@@ -28,10 +28,11 @@ memoryLeft = os.totalmem();
 memoryFree = memoryLeft*0.000001;
 memoryTotal = os.freemem();
 memorytotal = memoryTotal*0.000001;
-//showing files to the public
+
 app.get('/',(req, res) =>{
-    res.render('index',{title: 'Home Page'})
+  res.render('index',{title: 'Home Page'})
 });
+
 
 app.get('/about',(req, res) =>{
     res.render('about',{
@@ -40,7 +41,8 @@ app.get('/about',(req, res) =>{
       load: os.loadavg(),
       type: os.platform(),
       memoryTotal: Math.floor(memoryFree),
-      memoryLeft: Math.floor(memorytotal)
+      memoryLeft: Math.floor(memorytotal),
+      
     })
 });
 app.get('/ships/:item', (req, res) => {
@@ -67,13 +69,17 @@ app.get('/ships/:item', (req, res) => {
 app.use('/auth', require('../routes/auth'));
 
 app.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login', {
+    title: 'Login'
+  });
 });
 
 
 
 app.get('/register', (req, res) => {
-  res.render('register');
+  res.render('register', {
+    title: 'Registration'
+  });
 });
 
 
@@ -89,5 +95,33 @@ app.use(function(req, res) {
     res.render('../api');
 });
 
-
+//esiil
+const ESIIL = require('esiil')
+const project = ESIIL({
+  clientID: process.env.SSOClient,
+  clientSecret: process.env.SSOSecret,
+  callbackURL: 'http://localhost:3000/callback',
+  userAgent: 'Biscuits Industrial IGN: I Like Biscuits',
+  state: 'MyState',
+  scopes: ['publicData', 'esi-location.read_location.v1', 'esi-location.read_ship_type.v1', 'esi-mail.read_mail.v1', 'esi-skills.read_skills.v1', 'esi-skills.read_skillqueue.v1', 'esi-wallet.read_character_wallet.v1', 'esi-clones.read_clones.v1', 'esi-killmails.read_killmails.v1', 'esi-assets.read_assets.v1', 'esi-characters.read_medals.v1', 'esi-characters.read_standings.v1', 'esi-industry.read_character_jobs.v1', 'esi-characters.read_blueprints.v1', 'esi-location.read_online.v1', 'esi-clones.read_implants.v1', 'esi-characters.read_fatigue.v1', 'esi-industry.read_corporation_jobs.v1', 'esi-industry.read_character_mining.v1', 'esi-characters.read_titles.v1']
+})
+app.get('/eveauth', (req, res) => {
+  res.status(301).redirect(project.authRequestURL())
+})
+ 
+app.get('/callback', async (req, res) => {
+  const { toonID } = await project.receiveAuthCode(req.query.code)
+})
+app.get('/mylp', async (req, res) => {
+  myCharacter.lp(toonID)
+  .then(res => console.dir(res.body))
+  .catch(err => console.error(err))
+  res.send('done')
+})
+app.get('/myassets', async (req, res) => {
+  myCharacter.assets(toonID, { page: 2 })
+  .then(res => console.dir(res.body))
+  .catch(err => console.error(err))
+  res.send('done')
+})
 module.exports = app;
