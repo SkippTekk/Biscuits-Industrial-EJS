@@ -42,4 +42,4 @@ Modules used so far
 
 [esiil](https://www.npmjs.com/package/esiil)
 ``npm i esiil --save `` 
-Also made by a contributer of the project. Karnthis
+Also made by a contributer of the project. [Karnthis](https://github.com/karnthis)

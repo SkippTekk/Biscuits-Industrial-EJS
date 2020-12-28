@@ -66,7 +66,7 @@ app.get('/ships/:item', (req, res) => {
         })  
     })
 });
-app.use('/auth', require('../routes/auth'));
+
 
 app.get('/login', (req, res) => {
   res.render('login', {
@@ -88,40 +88,56 @@ app.get('/ships', function (req, res) {
   res.render('ships')
 });
 
-  //api shit 
-const apiRouter = require('../server/routes')
-app.use('/api/InvTypes', apiRouter)
-app.use(function(req, res) {
-    res.render('../api');
-});
 
-//esiil
-const ESIIL = require('esiil')
-const project = ESIIL({
-  clientID: process.env.SSOClient,
-  clientSecret: process.env.SSOSecret,
-  callbackURL: 'http://localhost:3000/callback',
-  userAgent: 'Biscuits Industrial IGN: I Like Biscuits',
-  state: 'MyState',
-  scopes: ['publicData', 'esi-location.read_location.v1', 'esi-location.read_ship_type.v1', 'esi-mail.read_mail.v1', 'esi-skills.read_skills.v1', 'esi-skills.read_skillqueue.v1', 'esi-wallet.read_character_wallet.v1', 'esi-clones.read_clones.v1', 'esi-killmails.read_killmails.v1', 'esi-assets.read_assets.v1', 'esi-characters.read_medals.v1', 'esi-characters.read_standings.v1', 'esi-industry.read_character_jobs.v1', 'esi-characters.read_blueprints.v1', 'esi-location.read_online.v1', 'esi-clones.read_implants.v1', 'esi-characters.read_fatigue.v1', 'esi-industry.read_corporation_jobs.v1', 'esi-industry.read_character_mining.v1', 'esi-characters.read_titles.v1']
-})
-app.get('/eveauth', (req, res) => {
-  res.status(301).redirect(project.authRequestURL())
-})
- 
-app.get('/callback', async (req, res) => {
-  const { toonID } = await project.receiveAuthCode(req.query.code)
-})
-app.get('/mylp', async (req, res) => {
-  myCharacter.lp(toonID)
-  .then(res => console.dir(res.body))
-  .catch(err => console.error(err))
-  res.send('done')
-})
-app.get('/myassets', async (req, res) => {
-  myCharacter.assets(toonID, { page: 2 })
-  .then(res => console.dir(res.body))
-  .catch(err => console.error(err))
-  res.send('done')
-})
-module.exports = app;
+
+  //api shit
+  const apiRouter = require('../server/routes')
+  app.use('/api/InvTypes', apiRouter)
+  
+  
+  //esiil
+  const ESIIL = require('esiil')
+  const project = ESIIL({
+    clientID: process.env.SSOClient,
+    clientSecret: process.env.SSOClient,
+    callbackURL: 'http://localhost:3000/callback',
+    userAgent: 'Biscuits Industrial IGN I Like Biscuits',
+    state: 'MyState',
+    scopes: ['publicData', 'esi-location.read_location.v1', 'esi-location.read_ship_type.v1', 'esi-mail.read_mail.v1', 'esi-skills.read_skills.v1', 'esi-skills.read_skillqueue.v1', 'esi-wallet.read_character_wallet.v1', 'esi-clones.read_clones.v1', 'esi-killmails.read_killmails.v1', 'esi-assets.read_assets.v1', 'esi-characters.read_medals.v1', 'esi-characters.read_standings.v1', 'esi-industry.read_character_jobs.v1', 'esi-characters.read_blueprints.v1', 'esi-location.read_online.v1', 'esi-clones.read_implants.v1', 'esi-characters.read_fatigue.v1', 'esi-industry.read_corporation_jobs.v1', 'esi-industry.read_character_mining.v1', 'esi-characters.read_titles.v1']
+  })
+  
+  const myCharacter = project.newCharacter()
+  const myUniverse = project.newUniverse()
+  
+  app.get('/eveauth', (req, res) => {
+    res.status(301).redirect(project.authRequestURL())
+  })
+  
+  app.get('/callback', async (req, res) => {
+    const { toonID } = await project.receiveAuthCode(req.query.code)
+  })
+  app.get('/mylp', async (req, res) => {
+    myCharacter.lp(toonID)
+    .then(res => console.dir(res.body))
+    .catch(err => console.error(err))
+    res.send('done')
+  })
+  app.get('/myassets', async (req, res) => {
+    myCharacter.assets(toonID, { page: 2 })
+    .then(res => console.dir(res.body))
+    .catch(err => console.error(err))
+    res.send('done')
+  })
+  
+  app.get('/getid', async (req, res) => {
+      myUniverse.name2ID([`Tcgre'l en Karnt`])
+          .then(res => console.dir(res.body))
+          .catch(err => console.error(err))
+      res.send('done')
+  })
+  
+  app.use(function(req, res) {
+      res.render('../api');
+  });
+  
+  module.exports = app;
