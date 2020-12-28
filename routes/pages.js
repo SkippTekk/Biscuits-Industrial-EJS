@@ -115,6 +115,7 @@ app.get('/ships', function (req, res) {
   
   app.get('/callback', async (req, res) => {
     const { toonID } = await project.receiveAuthCode(req.query.code)
+      res.redirect(`/myassets/${toonID}`)
   })
   app.get('/mylp', async (req, res) => {
     myCharacter.lp(toonID)
@@ -122,8 +123,8 @@ app.get('/ships', function (req, res) {
     .catch(err => console.error(err))
     res.send('done')
   })
-  app.get('/myassets', async (req, res) => {
-    myCharacter.assets(toonID, { page: 2 })
+  app.get('/myassets/:toonID', async (req, res) => {
+    myCharacter.assets(req.params.toonID, { page: 1 })
     .then(res => console.dir(res.body))
     .catch(err => console.error(err))
     res.send('done')
