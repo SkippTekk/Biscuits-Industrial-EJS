@@ -90,9 +90,7 @@ app.get('/ships', function (req, res) {
 
 
 
-  //api shit
-  const apiRouter = require('../server/routes')
-  app.use('/api/InvTypes', apiRouter)
+
   
   
   //esiil
@@ -137,7 +135,9 @@ app.get('/ships', function (req, res) {
           .catch(err => console.error(err))
       res.send('done')
   })
-  
+  //api shit
+  const apiRouter = require('../server/routes')
+  app.use('/api/InvTypes', apiRouter)
   app.use(function(req, res) {
       res.render('../api');
   });
