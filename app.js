@@ -14,7 +14,7 @@ app.use('/js', express.static(__dirname + 'public/js'));
 app.set('views', 'views')
 app.set('view engine', 'ejs')
 
-app.use('/', require('./routes/pages'));
+app.use('/*', require('./routes/pages'));
 
 //error handling like 404, but sadly it's fucking BROKEN as usual
 

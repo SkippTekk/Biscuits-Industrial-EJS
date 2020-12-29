@@ -116,6 +116,7 @@ app.get('/ships', function (req, res) {
   app.get('/callback', async (req, res) => {
     const { toonID } = await project.receiveAuthCode(req.query.code)
       res.redirect(`/myassets/${toonID}`)
+      console.log(req.query.code)
   })
   app.get('/mylp', async (req, res) => {
     myCharacter.lp(toonID)
