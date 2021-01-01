@@ -13,6 +13,8 @@ and it will be in [localhost](http://localhost:3000) port 3000
 
 Modules used so far
 
+```npm i --save nodemon ejs dotenv mysql body-parser express-session express jsonwebtoken brycptjs esiil nodemailer```
+
 [Nodemon](https://www.npmjs.com/package/nodemon)
 ``npm i nodemon --save``
 
@@ -26,7 +28,7 @@ Modules used so far
 ``npm i mysql --save``
 
 [body-parser](https://www.npmjs.com/package/body-parser)
-``npm i body parser --save``
+``npm i body-parser --save``
 
 [express-session](https://www.npmjs.com/package/express-session)
 ``npm i express-session --save``
@@ -43,3 +45,6 @@ Modules used so far
 [esiil](https://www.npmjs.com/package/esiil)
 ``npm i esiil --save `` 
 Also made by a contributer of the project. [Karnthis](https://github.com/karnthis)
+
+[nodemailer](https://www.npmjs.com/package/nodemailer)
+``npm i nodemailer --save``

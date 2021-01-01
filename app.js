@@ -3,8 +3,17 @@ const express = require('express');
 const app = express();
 const port = process.env.port;
 const db = require('./server/index');
+const mysql = require('mysql');
+// require('./server/mail');
 
-
+//user database connection
+const sql = mysql.createConnection({
+  password: process.env.MYSQL_PASS,
+  user: process.env.MYSQL_USER,
+  database: process.env.MYSQL_DBU,
+  host: process.env.MYSQL_HOST,
+  charset: 'utf8mb4_bin'
+})
 
 
 app.use(express.static('public'));
