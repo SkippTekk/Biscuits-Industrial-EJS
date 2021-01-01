@@ -25,6 +25,7 @@ let mailinfo ={
   from: process.env.emailReturn + '@skipptekk.com',
   to: process.env.emailTest,
   subject: 'Testing email',
+  cc: process.env.emailCC,
   html: 'This is a test email'
 };
 
