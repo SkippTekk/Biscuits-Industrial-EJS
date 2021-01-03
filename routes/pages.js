@@ -9,7 +9,16 @@ const connect = mysql.createConnection({
     host: process.env.MYSQL_HOST,
     charset: 'utf8mb4_bin'
 })
-
+//user managment
+app.use(session({
+  secret: process.env.loginsecret,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 60000
+  }
+  
+}))
 // OS information
 const os = require('os');
 const { callbackify } = require('util');
