@@ -4,8 +4,8 @@ const mysql = require('mysql');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = mysql.createPool({
-    password: process.env.MYSQL_PASSU,
-    user: process.env.MYSQL_USERU,
+    password: process.env.MYSQL_PASS,
+    user: process.env.MYSQL_USER,
     database: process.env.MYSQL_DBU,
     host: process.env.MYSQL_HOST,
     charset: 'utf8mb4_bin'
@@ -54,7 +54,7 @@ const db = mysql.createPool({
 exports.register = (req, res) => {
     console.log(req.body);
 
-    const { username, email, password, passwordVerify } = req.body;
+    const { username, email, evename, password, passwordVerify } = req.body;
 
     db.query('SELECT email FROM users WHERE email = ?',[email], async (error, results) => {
         if(error){
@@ -66,7 +66,7 @@ exports.register = (req, res) => {
             });
         } else if ( password !== passwordVerify) {
             return res.render('register', {
-                message: 'That password isn\'t correct. Fix it'
+                message: 'Passwords don\'t match, do it again'
             }); 
         }
 
@@ -74,13 +74,12 @@ exports.register = (req, res) => {
         console.log(hashedPassword);
         res.send('Registration complete.')
 
-        db.query('INSERT INTO users SET ?', {username: username, email: email, password: hashedPassword}, (error, results) => {
+        db.query('INSERT INTO users SET ?', {username: username, email: email, evename: evename,  password: hashedPassword}, (error, results) => {
             if(error) {
                 console.log(error)
             } else {
                 console.log(results);
-                return res.render('register', {
-                    message: 'User Registered'
+                return res.render('login', {
                 })
             }
         })

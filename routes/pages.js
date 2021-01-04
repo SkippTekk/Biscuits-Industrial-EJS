@@ -10,6 +10,7 @@ const connect = mysql.createConnection({
     charset: 'utf8mb4_bin'
 })
 //user managment
+const session = require('express-session')
 app.use(session({
   secret: process.env.loginsecret,
   resave: false,
@@ -37,14 +38,12 @@ memoryLeft = os.totalmem();
 memoryFree = memoryLeft*0.000001;
 memoryTotal = os.freemem();
 memorytotal = memoryTotal*0.000001;
-//login shit
-var session = require('express-session')
-app.use(session({
-  secret: process.env.loginsecret,
-  resave: false,
-  saveUninitialized: true,
-  cookie: { maxAge: 3600 }
-}));
+
+
+
+
+//website loading shit
+app.use('/auth', require('./auth'));
 app.get('/',(req, res) =>{
   res.render('index',{title: 'Home Page'})
 });

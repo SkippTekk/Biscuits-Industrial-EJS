@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 require('dotenv').config();
-const pool = mysql.createPool({
+const connection = mysql.createPool({
     connectionLimit: 100,
     password: process.env.MYSQL_PASS,
     user: process.env.MYSQL_USER,
@@ -8,11 +8,11 @@ const pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
     charset: 'utf8mb4_bin'
 });
-pool.getConnection( (err) =>{
+connection.getConnection( (err) =>{
     if(err) {
       console.log(err)}
       else {
-        console.log(`Connected to *` +process.env.MYSQL_DB +`* database /server/db/index.js`)
+        console.log(`Connected to *` +process.env.MYSQL_DB +`* database /server/index.js`)
       }
   })
 
@@ -22,7 +22,7 @@ let invtypes = {};
 invtypes.all = () => {
 
     return new Promise((resolve, reject) => {
-            pool.query(`SELECT * FROM invTypes`, (err, results) => {
+            connection.query(`SELECT * FROM invTypes`, (err, results) => {
                 if(err){
                     return reject(err);
                 }
@@ -33,7 +33,7 @@ invtypes.all = () => {
 invtypes.id = (id) => {
 
     return new Promise((resolve, reject) => {
-            pool.query(`SELECT * FROM invTypes WHERE typeID = ?`, id, (err, results) => {
+            connection.query(`SELECT * FROM invTypes WHERE typeID = ?`, id, (err, results) => {
                 if(err){
                     return reject(err);
                 }
@@ -44,7 +44,7 @@ invtypes.id = (id) => {
 invtypes.ships = (ship) => {
 
     return new Promise((resolve, reject) => {
-            pool.query(`SELECT * FROM invTypes WHERE typeName = ?`, ship, (err, results) => {
+            connection.query(`SELECT * FROM invTypes WHERE typeName = ?`, ship, (err, results) => {
                 if(err){
                     return reject(err);
                 }
@@ -55,7 +55,7 @@ invtypes.ships = (ship) => {
 invtypes.builds = (build) => {
 
     return new Promise((resolve, reject) => {
-            pool.query(`SELECT m.materialTypeID, m.quantity, i2.typeName, m.activityID FROM industryActivityMaterials m INNER JOIN invTypes i1 ON i1.typeID = m.typeID INNER JOIN invTypes i2 ON i2.typeID = m.materialtypeID INNER JOIN ramActivities i3 ON i3.activityID = m.activityID = 1 WHERE i1.typeName = ? AND m.activityID = 1 ORDER BY m.materialTypeID ASC`, build, (err, results) => {
+            connection.query(`SELECT m.materialTypeID, m.quantity, i2.typeName, m.activityID FROM industryActivityMaterials m INNER JOIN invTypes i1 ON i1.typeID = m.typeID INNER JOIN invTypes i2 ON i2.typeID = m.materialtypeID INNER JOIN ramActivities i3 ON i3.activityID = m.activityID = 1 WHERE i1.typeName = ? AND m.activityID = 1 ORDER BY m.materialTypeID ASC`, build, (err, results) => {
                 if(err){
                     return reject(err);
                 }
