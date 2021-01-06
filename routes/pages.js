@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express.Router();
+const bcrypt = require('bcryptjs');
 //const bcrypt = require('bcrypt');
 const mysql = require('mysql')
 const connect = mysql.createConnection({
@@ -16,7 +17,8 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    maxAge: 60000
+    maxAge: 60000,
+    secure: true
   }
   
 }))
@@ -40,14 +42,14 @@ memoryTotal = os.freemem();
 memorytotal = memoryTotal*0.000001;
 
 
-
+app.use(express.urlencoded({ extended: false}))
 
 //website loading shit
-app.use('/auth', require('./auth'));
+
 app.get('/',(req, res) =>{
   res.render('index',{title: 'Home Page'})
 });
-
+app.use('/auth', require('./auth'));
 
 app.get('/about',(req, res) =>{
     res.render('about',{
@@ -81,22 +83,27 @@ app.get('/ships/:item', (req, res) => {
         })  
     })
 });
-
-
-app.get('/login', (req, res) => {
-  res.render('login', {
-    title: 'Login'
-  });
-});
-
-
-
 app.get('/register', (req, res) => {
   res.render('register', {
     title: 'Registration'
   });
 });
 
+app.get('/login', (req, res) => {
+  res.render('login', {
+    title: 'Login'
+  });
+});
+app.get('/account', function(req, res) {
+  if(!res.session) {
+    return res.status(401).send();
+  } 
+  return res.status(200).send('This is a tesing page.')
+})
+app.get('/logout', function(req, res) {
+  req.session.destroy();
+  res.status(200).redirect('/');
+})
 
 
 app.get('/ships', function (req, res) {
@@ -170,7 +177,8 @@ app.get('/ships', function (req, res) {
       res.send('done')
   })
   //api shit
-  const apiRouter = require('../server/routes')
+  const apiRouter = require('../server/routes');
+const { response } = require('express');
   app.use('/api/InvTypes', apiRouter)
   app.use(function(req, res) {
       res.render('../api');

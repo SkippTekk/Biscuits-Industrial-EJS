@@ -33,7 +33,7 @@ Modules used so far
 [express-session](https://www.npmjs.com/package/express-session)
 ``npm i express-session --save``
 
-[expresss](https://www.npmjs.com/package/express)
+[express](https://www.npmjs.com/package/express)
 ``npm i express --save``
 
 [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
