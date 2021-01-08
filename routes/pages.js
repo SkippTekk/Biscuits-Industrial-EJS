@@ -9,7 +9,14 @@ const connect = mysql.createConnection({
     database: process.env.MYSQL_DB,
     host: process.env.MYSQL_HOST,
     charset: 'utf8mb4_bin'
-})
+});
+const db = mysql.createPool({
+  password: process.env.MYSQL_PASS,
+  user: process.env.MYSQL_USER,
+  database: process.env.MYSQL_DBU,
+  host: process.env.MYSQL_HOST,
+  charset: 'utf8mb4_bin'
+});
 //user managment
 const session = require('express-session')
 app.use(session({
@@ -20,6 +27,7 @@ app.use(session({
     maxAge: 60000,
     secure: true
   }
+  
   
 }))
 // OS information
@@ -48,7 +56,7 @@ app.use(express.urlencoded({ extended: false}))
 
 app.get('/',(req, res) =>{
   res.render('index',{
-    title: 'Home Page'
+    title: 'Home Page',
   });
 });
 app.use('/auth', require('./auth'));
@@ -69,11 +77,80 @@ app.get('/login', (req, res) => {
     title: 'Login'
   });
 });
+app.post('/login', function(req,res,next) {
+  var email = req.body.email;
+  var password = req.body.password;
+
+  var sql = 'select * from users where email = ?;';
+
+  db.query(sql,[email], function(err,results,fields){
+    if(err) throw err;
+    if(results.length && bcrypt.compareSync(password, results[0].password)){
+      req.session.email = email;
+      res.redirect('/dashboard');
+    } else {
+      req.session.flag = 4;
+      res.render('login', {
+        title: 'Login'
+      });
+    }
+  });
+});
 app.get('/register', (req, res) => {
   res.render('register', {
     title: 'Registration'
   });
 });
+app.post('/register', function(req, res, next) {
+    var username = req.body.username;
+    var evename = req.body.evename;
+    var email = req.body.email;
+    var password = req.body.password;
+    var vpass = req.body.passwordVerify
+
+        if(vpass === password){
+            var sql = 'select * from users where email = ?;'
+            db.query(sql, [email], function(err, result, fields){
+              if(err) throw err;
+              
+              if(result.length > 0){
+                  req.session.flag = 1;
+                  console.log('password worked? ' + email)
+                  res.redirect('register');            
+        } else {
+            var hashedPassword = bcrypt.hashSync(password, 8);
+            var sql = 'insert into users(username, evename, email, password) values(?,?,?,?);';
+            
+            db.query(sql,[username,evename,email, hashedPassword], function(err, result, fields){
+                if(err) throw err;
+                req.session.flag = 2;
+                console.log('register of ' + username, email)
+                res.redirect('/');
+            });
+        };
+      })
+    } else{
+      req.session.flag = 3
+      res.render('register', {
+        title: 'Registration'
+      });
+
+    }
+
+      
+});
+app.get('/dashboard', function(req, res, next) {
+  res.render('dashboard', {
+    message: 'Welcome ,' + req.session.email
+  })
+  console.log('/dashboard error log  ' + req.session.email)
+});
+app.get('/logout', function(req, res, next){
+  if(req.session.email){
+    req.session.destroy();
+  }
+  res.redirect('/')
+})
 app.get('/biscuits', function (req, res) {
   const sqlite3 = require('sqlite3').verbose();
 
@@ -83,9 +160,7 @@ app.get('/biscuits', function (req, res) {
     db.close();
 });
 
-app.get('/dashboard', function(req, res) {
-  
-});
+
 app.get('/logout', function(req, res) {
   req.session.destroy();
   res.status(200).redirect('/');
