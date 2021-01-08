@@ -47,7 +47,9 @@ app.use(express.urlencoded({ extended: false}))
 //website loading shit
 
 app.get('/',(req, res) =>{
-  res.render('index',{title: 'Home Page'})
+  res.render('index',{
+    title: 'Home Page'
+  });
 });
 app.use('/auth', require('./auth'));
 
@@ -60,56 +62,59 @@ app.get('/about',(req, res) =>{
       memoryTotal: Math.floor(memoryFree),
       memoryLeft: Math.floor(memorytotal),
       
-    })
+    });
 });
-app.get('/ships/:item', (req, res) => {
-  connect.query('SELECT * FROM invTypes WHERE typeName = ?', [req.params.item], function(err, results1){
-    connect.query('SELECT m.materialTypeID, m.quantity, i2.typeName, m.activityID FROM industryActivityMaterials m INNER JOIN invTypes i1 ON i1.typeID = m.typeID INNER JOIN invTypes i2 ON i2.typeID = m.materialtypeID INNER JOIN ramActivities i3 ON i3.activityID = m.activityID = 1 WHERE i1.typeName = ? AND m.activityID = 1 ORDER BY `m`.`materialTypeID` ASC', [req.params.item + ' blueprint'], function(err, results2){            
-            res.render('shipinformation', {
-                title: 'Building ships?',
-                typeid: results1[0].typeID,
-                groupid: results1[0].groupID,
-                typename: results1[0].typeName,
-                description: results1[0].description,
-                mass: results1[0].mass,
-                volume: results1[0].volume,
-                capacity: results1[0].capacity,
-                portionSize: results1[0].portionSize,
-                raceID: results1[0].raceID,
-                graphicID: results1[0].graphicID,
-                
-                MINERALS: results2                
-            });
-        })  
-    })
+app.get('/login', (req, res) => {
+  res.render('login', {
+    title: 'Login'
+  });
 });
 app.get('/register', (req, res) => {
   res.render('register', {
     title: 'Registration'
   });
 });
+app.get('/biscuits', function (req, res) {
+  const sqlite3 = require('sqlite3').verbose();
 
-app.get('/login', (req, res) => {
-  res.render('login', {
-    title: 'Login'
-  });
+  let db = new sqlite3.Database(":memory:");
+  db.each("SELECT * from users", function(err, row) {
+    console.log(err);});
+    db.close();
 });
-app.get('/account', function(req, res) {
-  if(!res.session) {
-    return res.status(401).send();
-  } 
-  return res.status(200).send('This is a tesing page.')
-})
+
+app.get('/dashboard', function(req, res) {
+  
+});
 app.get('/logout', function(req, res) {
   req.session.destroy();
   res.status(200).redirect('/');
-})
-
+});
 
 app.get('/ships', function (req, res) {
   res.render('ships')
 });
-
+app.get('/ships/:item', (req, res) => {
+    connect.query('SELECT * FROM invTypes WHERE typeName = ?', [req.params.item], function(err, results1){
+      connect.query('SELECT m.materialTypeID, m.quantity, i2.typeName, m.activityID FROM industryActivityMaterials m INNER JOIN invTypes i1 ON i1.typeID = m.typeID INNER JOIN invTypes i2 ON i2.typeID = m.materialtypeID INNER JOIN ramActivities i3 ON i3.activityID = m.activityID = 1 WHERE i1.typeName = ? AND m.activityID = 1 ORDER BY `m`.`materialTypeID` ASC', [req.params.item + ' blueprint'], function(err, results2){            
+              res.render('shipinformation', {
+                  title: 'Building ships?',
+                  typeid: results1[0].typeID,
+                  groupid: results1[0].groupID,
+                  typename: results1[0].typeName,
+                  description: results1[0].description,
+                  mass: results1[0].mass,
+                  volume: results1[0].volume,
+                  capacity: results1[0].capacity,
+                  portionSize: results1[0].portionSize,
+                  raceID: results1[0].raceID,
+                  graphicID: results1[0].graphicID,
+                  
+                  MINERALS: results2                
+              });
+          }) ; 
+      });
+  });
 
 
 
@@ -143,45 +148,45 @@ app.get('/ships', function (req, res) {
                      'esi-industry.read_corporation_jobs.v1',
                       'esi-industry.read_character_mining.v1',
                        'esi-characters.read_titles.v1']
-  })
+  });
   
   const myCharacter = project.newCharacter()
   const myUniverse = project.newUniverse()
   
   app.get('/eveauth', (req, res) => {
     res.status(301).redirect(project.authRequestURL())
-  })
+  });
   
-  app.get('/callback', async (req, res) => {
+app.get('/callback', async (req, res) => {
     const { toonID } = await project.receiveAuthCode(req.query.code)
       res.redirect(`/myassets/${toonID}`)
       console.log(req.query.code)
-  })
-  app.get('/mylp', async (req, res) => {
+  });
+app.get('/mylp', async (req, res) => {
     myCharacter.lp(toonID)
     .then(res => console.dir(res.body))
     .catch(err => console.error(err))
     res.send('done')
-  })
-  app.get('/myassets/:toonID', async (req, res) => {
+  });
+app.get('/myassets/:toonID', async (req, res) => {
     myCharacter.assets(req.params.toonID, { page: 1 })
     .then(res => console.dir(res.body))
     .catch(err => console.error(err))
     res.send('done')
-  })
+  });
   
-  app.get('/getid', async (req, res) => {
+app.get('/getid', async (req, res) => {
       myUniverse.name2ID([`Tcgre'l en Karnt`])
           .then(res => console.dir(res.body))
           .catch(err => console.error(err))
       res.send('done')
-  })
-  //api shit
-  const apiRouter = require('../server/routes');
-const { response } = require('express');
-  app.use('/api/InvTypes', apiRouter)
-  app.use(function(req, res) {
-      res.render('../api');
   });
-  
+  //api shit
+const apiRouter = require('../server/routes');
+const { response } = require('express');
+
+app.get('/api', function (req, res) {
+    res.render('../api')
+  });
+app.use('/api/InvTypes', apiRouter)  
   module.exports = app;
