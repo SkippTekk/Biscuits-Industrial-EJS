@@ -26,6 +26,13 @@ app.set('view engine', 'ejs')
 app.use(function(req, res, next) { console.log("URI Request: " + req.url); return next(); });
 app.use('/', require('./routes/pages'));
 
+//error handling like 404, but sadly it's fucking BROKEN as usual
+
+app.use(function(req, res) {
+  res.status(400);
+ res.render('error/404', {title: '404: File Not Found'});
+ });
+
 
 //file check system BROKEN
 // const fs = require('fs');

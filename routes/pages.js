@@ -183,7 +183,6 @@ app.get('/getid', async (req, res) => {
   });
   //api shit
 const apiRouter = require('../server/routes');
-const { response } = require('express');
 
 app.get('/api', function (req, res) {
     res.render('../api')
