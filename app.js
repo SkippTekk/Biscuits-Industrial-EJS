@@ -33,19 +33,4 @@ app.use(function(req, res) {
  res.render('error/404', {title: '404: File Not Found'});
  });
 
-
-//file check system BROKEN
-// const fs = require('fs');
-// const filePath = 'fuzzwork.co.uk/dump/mssql-latest.bacpac.md5';
-
-// var file = fs.readFileSync(filePath);
-
-// console.log('Initial File content : ' + file);
-
-
-// fs.watchFile(filePath, { persistent: true, interval: 100 }, function() {
-//     console.log('File Changed ...');
-//     file = fs.readFileSync(filePath);
-//     console.log('File content at : ' + new Date() + ' is \n' + file);
-// });
 app.listen(port, () => console.info(`listening on port ` + port))

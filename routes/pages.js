@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express.Router();
 const bcrypt = require('bcryptjs');
+const authController = require('../controllers/auth')
 //const bcrypt = require('bcrypt');
 const mysql = require('mysql')
 const connect = mysql.createConnection({
@@ -59,7 +60,6 @@ app.get('/',(req, res) =>{
     title: 'Home Page',
   });
 });
-app.use('/auth', require('./auth'));
 
 app.get('/about',(req, res) =>{
     res.render('about',{
@@ -72,85 +72,56 @@ app.get('/about',(req, res) =>{
       
     });
 });
+//login crap
 app.get('/login', (req, res) => {
+  if(req.session.email < 1){
+    res.send('/dashboard')
+  }else {
   res.render('login', {
     title: 'Login'
   });
+}
 });
-app.post('/login', function(req,res,next) {
-  var email = req.body.email;
-  var password = req.body.password;
+app.post('/login', authController.login);
 
-  var sql = 'select * from users where email = ?;';
 
-  db.query(sql,[email], function(err,results,fields){
-    if(err) throw err;
-    if(results.length && bcrypt.compareSync(password, results[0].password)){
-      req.session.email = email;
-      res.redirect('/dashboard');
-    } else {
-      req.session.flag = 4;
-      res.render('login', {
-        title: 'Login'
-      });
-    }
-  });
+//register crap
+app.get('/register', function(req, res,next) {
+  if(req.session.flag == 1){
+    res.render('register', {title: 'Registration', message: 'testing'})
+  } else if (req.session.flag == 2){
+    res.render('register', {title: 'Registration', message: 'testing'})
+  } else if (req.session.flag == 2){
+    res.render('register', {title: 'Registration', message: 'testing'})
+  } else if (req.session.flag == 2){
+    res.render('register', {title: 'Registration', message: 'testing'})
+  }else {
+  res.render('register');
+}
 });
-app.get('/register', (req, res) => {
-  res.render('register', {
-    title: 'Registration'
-  });
-});
-app.post('/register', function(req, res, next) {
-    var username = req.body.username;
-    var evename = req.body.evename;
-    var email = req.body.email;
-    var password = req.body.password;
-    var vpass = req.body.passwordVerify
+app.post('/register', authController.register);
 
-        if(vpass === password){
-            var sql = 'select * from users where email = ?;'
-            db.query(sql, [email], function(err, result, fields){
-              if(err) throw err;
-              
-              if(result.length > 0){
-                  req.session.flag = 1;
-                  console.log('password worked? ' + email)
-                  res.redirect('register');            
-        } else {
-            var hashedPassword = bcrypt.hashSync(password, 8);
-            var sql = 'insert into users(username, evename, email, password) values(?,?,?,?);';
-            
-            db.query(sql,[username,evename,email, hashedPassword], function(err, result, fields){
-                if(err) throw err;
-                req.session.flag = 2;
-                console.log('register of ' + username, email)
-                res.redirect('/');
-            });
-        };
-      })
-    } else{
-      req.session.flag = 3
-      res.render('register', {
-        title: 'Registration'
-      });
-
-    }
-
-      
-});
+//account seeing
 app.get('/dashboard', function(req, res, next) {
-  res.render('dashboard', {
-    message: 'Welcome ,' + req.session.email
-  })
-  console.log('/dashboard error log  ' + req.session.email)
+  if(req.session.email > 0){
+    res.render('dashboard', {
+      message: 'Welcome ,' + req.session.email
+    })
+    console.log('/dashboard error log  ' + req.session.email);
+    
+  }else {
+    res.redirect('login');
+}
+  
 });
-app.get('/logout', function(req, res, next){
-  if(req.session.email){
-    req.session.destroy();
-  }
-  res.redirect('/')
-})
+
+//logout of the website
+app.get('/logout', function(req, res) {
+  req.session.destroy();
+  res.status(200).redirect('/');
+});
+
+//fucking around with settings shit breaks here
 app.get('/biscuits', function (req, res) {
   const sqlite3 = require('sqlite3').verbose();
 
@@ -160,11 +131,6 @@ app.get('/biscuits', function (req, res) {
     db.close();
 });
 
-
-app.get('/logout', function(req, res) {
-  req.session.destroy();
-  res.status(200).redirect('/');
-});
 
 app.get('/ships', function (req, res) {
   res.render('ships')
