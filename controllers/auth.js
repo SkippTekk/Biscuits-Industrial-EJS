@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const mysql = require('mysql');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const db = mysql.createPool({
     password: process.env.MYSQL_PASS,
     user: process.env.MYSQL_USER,

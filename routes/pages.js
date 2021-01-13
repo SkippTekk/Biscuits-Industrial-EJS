@@ -1,9 +1,12 @@
 const express = require('express');
 const app = express.Router();
-const bcrypt = require('bcryptjs');
-const authController = require('../controllers/auth')
-//const bcrypt = require('bcrypt');
-const mysql = require('mysql')
+const authController = require('../controllers/auth');
+const bcrypt = require('bcrypt');
+const mysql = require('mysql');
+const bodyParser= require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const cors = require('cors');
 const connect = mysql.createConnection({
     password: process.env.MYSQL_PASS,
     user: process.env.MYSQL_USER,
@@ -18,19 +21,25 @@ const db = mysql.createPool({
   host: process.env.MYSQL_HOST,
   charset: 'utf8mb4_bin'
 });
-//user managment
-const session = require('express-session')
-app.use(session({
-  secret: process.env.loginsecret,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    maxAge: 60000,
-    secure: true
+
+//passport
+const passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
+app.use(passport.initialize());
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    User.findOne({ username: username }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
   }
-  
-  
-}))
+));
+
 // OS information
 const os = require('os');
 const { callbackify } = require('util');
@@ -51,8 +60,17 @@ memoryTotal = os.freemem();
 memorytotal = memoryTotal*0.000001;
 
 
-app.use(express.urlencoded({ extended: false}))
-
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true}));
+app.use(session({
+  key: "userId",
+  secret: process.env.loginsecret,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 60 * 60 * 24
+  }
+}));
 //website loading shit
 
 app.get('/',(req, res) =>{
@@ -74,40 +92,54 @@ app.get('/about',(req, res) =>{
 });
 //login crap
 app.get('/login', (req, res) => {
-  if(req.session.email < 1){
+  if(req.session.user){
     res.send('/dashboard')
   }else {
   res.render('login', {
-    title: 'Login'
+    title: 'Login',
+    user: req.user
   });
 }
 });
-app.post('/login', authController.login);
+// app.post('/login', authController.login);
+app.post('/login', passport.authenticate('local'), (req, res) => {
+  
+});
 
 
 //register crap
 app.get('/register', function(req, res,next) {
-  if(req.session.flag == 1){
-    res.render('register', {title: 'Registration', message: 'testing'})
-  } else if (req.session.flag == 2){
-    res.render('register', {title: 'Registration', message: 'testing'})
-  } else if (req.session.flag == 2){
-    res.render('register', {title: 'Registration', message: 'testing'})
-  } else if (req.session.flag == 2){
-    res.render('register', {title: 'Registration', message: 'testing'})
-  }else {
+
   res.render('register');
-}
 });
-app.post('/register', authController.register);
+// app.post('/register', authController.register);
+app.post('/register', function(req, res,next) {
+  const email  = req.body.email;
+  const password = req.body.password;
+  const username = req.body.username;
+  const evename = req.body.evename;
+
+  bcrypt.hash(password, 8,(err, hash) => {
+    if(err){
+      console.log(err)
+    }
+    db.query(
+      'INSERT INTO users(username, email, evename, password) VALUES (?,?,?,?)',[username, email, evename, hash],
+      (err, result) => {
+        console.log(err);
+      }
+    )
+  })
+
+});
 
 //account seeing
 app.get('/dashboard', function(req, res, next) {
-  if(req.session.email > 0){
+  if(req.session.id){
     res.render('dashboard', {
-      message: 'Welcome ,' + req.session.email
+      message: req.session.email
     })
-    console.log('/dashboard error log  ' + req.session.email);
+    console.log('/dashboard error log  ' + req.session.id);
     
   }else {
     res.redirect('login');
@@ -116,10 +148,11 @@ app.get('/dashboard', function(req, res, next) {
 });
 
 //logout of the website
-app.get('/logout', function(req, res) {
-  req.session.destroy();
-  res.status(200).redirect('/');
-});
+app.get('/logout',
+  function(req, res){
+    req.session.destroy();
+    res.redirect('/');
+  });
 
 //fucking around with settings shit breaks here
 app.get('/biscuits', function (req, res) {
@@ -224,6 +257,7 @@ app.get('/getid', async (req, res) => {
   });
   //api shit
 const apiRouter = require('../server/routes');
+const { ESRCH } = require('constants');
 
 app.get('/api', function (req, res) {
     res.render('../api')

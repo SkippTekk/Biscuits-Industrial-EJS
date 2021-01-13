@@ -10,9 +10,11 @@
   "author": "SkippTekk#6969 @ Discord",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "count-files": "^2.6.2",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
@@ -25,6 +27,8 @@
     "nodemailer": "^6.4.17",
     "nodemon": "^2.0.6",
     "os": "^0.1.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "request": "^2.88.2",
     "tape": "^5.0.1"
   }

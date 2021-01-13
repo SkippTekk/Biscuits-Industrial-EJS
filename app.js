@@ -14,8 +14,13 @@ const sql = mysql.createConnection({
   host: process.env.MYSQL_HOST,
   charset: 'utf8mb4_bin'
 })
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json())
+
+//middleware
+
+
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
 
 app.use(express.static('public'));
 app.use('/css', express.static(__dirname + 'public/css'));
@@ -23,7 +28,10 @@ app.use('/js', express.static(__dirname + 'public/js'));
 
 app.set('views', 'views')
 app.set('view engine', 'ejs')
-app.use(function(req, res, next) { console.log("URI Request: " + req.url); return next(); });
+app.use(function(req, res, next) { 
+  console.log("URI Request: " + req.url); 
+  return next(); 
+});
 app.use('/', require('./routes/pages'));
 
 //error handling like 404, but sadly it's fucking BROKEN as usual
