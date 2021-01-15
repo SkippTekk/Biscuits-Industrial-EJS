@@ -48,3 +48,11 @@ Also made by a contributer of the project. [Karnthis](https://github.com/karnthi
 
 [nodemailer](https://www.npmjs.com/package/nodemailer)
 ``npm i nodemailer --save``
+
+
+Creating a user in the database
+
+CREATE USER 'username here'@'localhost' IDENTIFIED BY 'password goes here';
+CREATE database eveprojects;
+GRANT ALL PRIVILEGES ON eveproject.* TO 'username here'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
