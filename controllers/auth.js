@@ -3,6 +3,7 @@ require('dotenv').config();
 const mysql = require('mysql');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const passport = require('passport')
 const db = mysql.createPool({
     password: process.env.MYSQL_PASS,
     user: process.env.MYSQL_USER,
@@ -12,15 +13,15 @@ const db = mysql.createPool({
   });
 
   exports.login = async (req, res) =>{
-    var email = req.body.email;
+    var username = req.body.username;
     var password = req.body.password;
   
-    var sql = 'select * from users where email = ?;';
+    var sql = 'select * from users where username = ?;';
   
-    db.query(sql,[email], function(err,results,fields){
+    db.query(sql,[username], function(err,results,fields){
       if(err) throw err;
       if(results.length && bcrypt.compareSync(password, results[0].password)){
-        req.session.email = email;
+        req.session.username = username;
         res.redirect('/dashboard');
       } else {
         req.session.flag = 4;
@@ -32,38 +33,43 @@ const db = mysql.createPool({
   }
 
 exports.register = (req, res) => {
-    var username = req.body.username;
-    var evename = req.body.evename;
-    var email = req.body.email;
-    var password = req.body.password;
-    var vpass = req.body.passwordVerify
+  const email  = req.body.email;
+  const password = req.body.password;
+  const username = req.body.username;
+  const evename = req.body.evename;
 
-        if(vpass === password){
-            var sql = 'select * from users where email = ?;'
-            db.query(sql, [email], function(err, result, fields){
-              if(err) throw err;
-              
-              if(result.length > 0){
-                  req.session.flag = 1;
-                  console.log('email already exists ' + email)
-                  res.redirect('register', { message: 'email already exists.'});            
-        } else {
-            var hashedPassword = bcrypt.hashSync(password, 8);
-            var sql = 'insert into users(username, evename, email, password) values(?,?,?,?);';
-            
-            db.query(sql,[username,evename,email, hashedPassword], function(err, result, fields){
-                if(err) throw err;
-                req.session.flag = 2;
-                console.log('register of ' + username, email)
-                res.redirect('/');
-            });
-        };
-      })
-    } else{
-      req.session.flag = 3
-      res.render('register', {
-        title: 'Registration'
-      });
 
+  bcrypt.hash(password, 8,(err, hash) => {
+    if(err){
+      console.log(err)
     }
+    db.query(
+      'INSERT INTO users(username, email, evename, password) VALUES (?,?,?,?)',[username, email, evename, hash],
+      (err, result) => {
+        db.query('SELECT LAST_INSERT_ID() as user_id', function(err, results, fields) {
+          if (err) throw error;
+          const user_id = results[0];
+          req.login(user_id, function(err){
+            res.redirect('/login');
+          })
+        })
+        console.log(err);
+      }
+    )
+  })
 };
+passport.serializeUser(function(user_id, done) {
+  done(null, user_id);
+});
+
+passport.deserializeUser(function(user_id, done) {
+    done(null, user_id);
+});
+function authenticationMiddleware () {  
+	return (req, res, next) => {
+		console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
+
+	    if (req.isAuthenticated()) return next();
+	    res.redirect('/login')
+	}
+}

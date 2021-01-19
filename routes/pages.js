@@ -7,6 +7,7 @@ const mysql = require('mysql');
 const bodyParser= require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
 const cors = require('cors');
 const connect = mysql.createConnection({
     password: process.env.MYSQL_PASS,
@@ -15,31 +16,19 @@ const connect = mysql.createConnection({
     host: process.env.MYSQL_HOST,
     charset: 'utf8mb4_bin'
 });
-const db = mysql.createPool({
+var options = {
   password: process.env.MYSQL_PASS,
   user: process.env.MYSQL_USER,
   database: process.env.MYSQL_DBU,
   host: process.env.MYSQL_HOST,
   charset: 'utf8mb4_bin'
-});
+};
+var sessionStore = new MySQLStore(options);
 
 //passport
-const passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
+const passport = require('passport')
 app.use(passport.initialize());
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
-  }
-));
+app.use(passport.session());
 
 // OS information
 const os = require('os');
@@ -68,6 +57,7 @@ app.use(bodyParser.json())
 app.use(session({
   secret: process.env.loginsecret,
   resave: false,
+  store: sessionStore,
   saveUninitialized: true,
   cookie: {
     secure: true,
@@ -107,7 +97,9 @@ app.get('/login', (req, res) => {
 }
 });
 // app.post('/login', authController.login);
-app.post('/login', passport.authenticate('local'), (req, res) => {
+app.post('/login', (req, res) => {
+  console.log(req.user)
+  console.log(req.isAuthenticated)
   
 });
 
@@ -117,30 +109,10 @@ app.get('/register', function(req, res,next) {
 
   res.render('register');
 });
-// app.post('/register', authController.register);
-app.post('/register', function(req, res,next) {
-  const email  = req.body.email;
-  const password = req.body.password;
-  const username = req.body.username;
-  const evename = req.body.evename;
-
-
-  bcrypt.hash(password, 8,(err, hash) => {
-    if(err){
-      console.log(err)
-    }
-    db.query(
-      'INSERT INTO users(username, email, evename, password) VALUES (?,?,?,?)',[username, email, evename, hash],
-      (err, result) => {
-        console.log(err);
-      }
-    )
-  })
-
-});
+app.post('/register', authController.register);
 
 //account seeing
-app.get('/dashboard', function(req, res, next) {
+app.get('/dashboard', authenticationMiddleware, function(req, res, next) {
   if(req.session.id){
     res.render('dashboard', {
       message: req.session.email
@@ -270,3 +242,11 @@ app.get('/api', function (req, res) {
   });
 app.use('/api/InvTypes', apiRouter)  
   module.exports = app;
+  function authenticationMiddleware () {  
+    return (req, res, next) => {
+      console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
+  
+        if (req.isAuthenticated()) return next();
+        res.redirect('/login')
+    }
+  }

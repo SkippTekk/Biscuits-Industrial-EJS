@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express');
+const MySQLStore = require('express-mysql-session')
 const app = express();
 const port = process.env.port;
 const db = require('./server/index');

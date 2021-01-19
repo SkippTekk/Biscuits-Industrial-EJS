@@ -20,6 +20,7 @@
     "ejs": "^3.1.5",
     "esiil": "^0.3.3",
     "express": "^4.17.1",
+    "express-mysql-session": "^2.1.5",
     "express-session": "^1.17.1",
     "express-validator": "^6.9.2",
     "gyp": "^0.5.0",
