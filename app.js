@@ -15,12 +15,6 @@ const sql = mysql.createConnection({
   charset: 'utf8mb4_bin'
 })
 
-//middleware
-
-
-const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json())
 
 app.use(express.static('public'));
 app.use('/css', express.static(__dirname + 'public/css'));

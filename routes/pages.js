@@ -1,4 +1,5 @@
 const express = require('express');
+const expressValid = require('express-validator')
 const app = express.Router();
 const authController = require('../controllers/auth');
 const bcrypt = require('bcrypt');
@@ -61,19 +62,23 @@ memorytotal = memoryTotal*0.000001;
 
 
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true}));
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
 app.use(session({
-  key: "userId",
   secret: process.env.loginsecret,
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   cookie: {
+    secure: true,
     maxAge: 60 * 60 * 24
   }
 }));
 //website loading shit
 
 app.get('/',(req, res) =>{
+  console.log(req.cookie)
+  console.log(req.session)
   res.render('index',{
     title: 'Home Page',
   });
@@ -118,6 +123,7 @@ app.post('/register', function(req, res,next) {
   const password = req.body.password;
   const username = req.body.username;
   const evename = req.body.evename;
+
 
   bcrypt.hash(password, 8,(err, hash) => {
     if(err){

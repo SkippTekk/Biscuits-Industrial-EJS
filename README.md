@@ -53,6 +53,6 @@ Also made by a contributer of the project. [Karnthis](https://github.com/karnthi
 Creating a user in the database
 
 CREATE USER 'username here'@'localhost' IDENTIFIED BY 'password goes here';
-CREATE database eveprojects;
+CREATE database eveproject;
 GRANT ALL PRIVILEGES ON eveproject.* TO 'username here'@'localhost' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
