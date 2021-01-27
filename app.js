@@ -5,6 +5,7 @@ const app = express();
 const port = process.env.port;
 const db = require('./server/index');
 const mysql = require('mysql');
+require('./discord/discord')
 // require('./server/mail');
 
 //user database connection

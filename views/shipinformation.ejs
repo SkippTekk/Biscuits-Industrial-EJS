@@ -31,7 +31,7 @@
               <p>Ship Capacity: <%= Intl.NumberFormat().format(capacity) %>
               <p>Ship Mass: <%- Intl.NumberFormat().format(mass) %>
               <p>Ship Volume: <%- Intl.NumberFormat().format(volume) %>
-              <p> Group ID: <%- Intl.NumberFormat().format(groupid) %>
+              <p>Group ID: <%- Intl.NumberFormat().format(groupid) %>
               <p>Race BROKEN on faction: 
                 <% if (raceID === 1) {%>
                   Caldari State
@@ -150,6 +150,7 @@
           <td class="c3"><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-ME*0.01)*.98*(1-0))))*1)%></td>
           </tr>
           <% } %>
+          
           </tbody>
             <table class="table">
           <th>Compressed Ore</th>
