@@ -173,7 +173,36 @@ app.get('/ships/:item', (req, res) => {
       }
       });
   });
-
+  app.get('/modules', function (req, res) {
+    res.render('ships')
+  });
+  app.get('/modules/:item', (req, res) => {
+    connect.query('SELECT * FROM invTypes WHERE typeName = ?', [req.params.item], function(err, results1){
+      if(results1 < 1) {
+        
+        res.render('error/404', {
+        })
+      } else {
+              connect.query('SELECT m.materialTypeID, m.quantity, i2.typeName, m.activityID FROM industryActivityMaterials m INNER JOIN invTypes i1 ON i1.typeID = m.typeID INNER JOIN invTypes i2 ON i2.typeID = m.materialtypeID INNER JOIN ramActivities i3 ON i3.activityID = m.activityID = 1 WHERE i1.typeName = ? AND m.activityID = 1 ORDER BY `m`.`materialTypeID` ASC', [req.params.item + ' blueprint'], function(err, results2){
+              res.render('moduleinformation', {
+                  title: 'Building modules?',
+                  typeid: results1[0].typeID,
+                  groupid: results1[0].groupID,
+                  typename: results1[0].typeName,
+                  description: results1[0].description,
+                  mass: results1[0].mass,
+                  volume: results1[0].volume,
+                  capacity: results1[0].capacity,
+                  portionSize: results1[0].portionSize,
+                  raceID: results1[0].raceID,
+                  graphicID: results1[0].graphicID,
+                  
+                  MINERALS: results2
+            });
+          });
+      }
+      });
+  });
 
 
   
