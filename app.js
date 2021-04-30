@@ -5,8 +5,13 @@ const app = express();
 const port = process.env.port;
 const db = require('./server/index');
 const mysql = require('mysql');
-require('./discord/discord')
+require('./discord/discord');
 // require('./server/mail');
+
+
+//beta fuzzy
+// require('./update');
+
 
 //user database connection
 const sql = mysql.createConnection({

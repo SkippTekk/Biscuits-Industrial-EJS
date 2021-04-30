@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+const { resolve } = require('path');
 require('dotenv').config();
 const connection = mysql.createPool({
     connectionLimit: 100,
@@ -63,5 +64,18 @@ invtypes.builds = (build) => {
             });
     });
 };
+invtypes.shipinfo = () => {
+
+    return new Promise((resolve, reject) => {
+            connection.query("SELECT invGroup.`categoryID`, invType.* FROM `invTypes` invType INNER JOIN `invGroups` invGroup ON invGroup.`groupID` = invType.`groupID` WHERE `invGroup`.`categoryID` = '6'", (err, results) => {
+                if(err){
+                    return reject(err);
+                }
+                return resolve(results);
+            });
+    });
+};
 
 module.exports = invtypes;
+
+// to add shit go to server -> routes -> index.js you dumb fuck (talking to Biscuits, not you public people)

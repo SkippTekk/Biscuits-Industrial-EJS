@@ -71,15 +71,7 @@
           </form>
             </fieldset>
           <label for="minval">How many ships are being built:<p></p> <select name='ShipDrop' class="ShipDrop"></select></label>
-          </div><br>
-          <fieldset>
-          <legend>Select your Rig (not working)</legend>
-          <select id="rig">
-          <option value="0">No Rig</option>
-          <option value="Tech1">Tech 1</option>
-          <option value="Tech2">Tech 2</option>
-          </select>
-          </fieldset>
+          </div>
           <fieldset>
           <legend>Select your Location </legend>
           <select id="location">
@@ -89,6 +81,26 @@
           </select>
           </fieldset>
           <fieldset>
+            <legend>Select your station</legend>
+            <select id="station">
+            <option value="Athanor">Athanor</option>
+            <option value="Tatara">Tatara</option>
+            <option value="Raitaru">Raitaru</option>
+            <option value="Azbel">Azbel</option>
+            <option value="Sotiyo">Sotiyo</option>
+            <option value="Astrahus">Astrahus</option>
+            <option value="Fortizar">Fortizar</option>
+            <option value="Keepstar">Keepstar</option>
+            </select>
+            </fieldset>
+          <fieldset>
+            <h1><legend>What's the rig?</legend></h1>
+            <select name="rig" id="bonus">
+            <option value="0">0%</option>
+            <option value="1">5%</option>
+            <option value="2">10%</option>
+            <option value="3">15%</option>
+            </select>
           <h1><legend>Ore Bonus Varient (not working)</legend></h1>
           <select name="Variend" id="bonus">
           <option value="0">0%</option>
@@ -123,7 +135,7 @@
 
                             $v.find(`.c1`).html(Intl.NumberFormat().format((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*1*(1-0))))*1));
                             $v.find(`.c2`).html(Intl.NumberFormat().format((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*.99*(1-0))))*1));
-                            $v.find(`.c3`).html(Intl.NumberFormat().format((Math.max(1, Math.ceil( minerals[x].quantity *(1-ME*0.01)*.98*(1-0))))*1));
+                            $v.find(`.c3`).html(Intl.NumberFormat().format((Math.max(1, Math.ceil( minerals[x].quantity *(1-(ME/100))*.98)*1))));
                           }
                   })
             });
@@ -147,9 +159,11 @@
 
           <td class="c1"><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-ME*0.01)*1*(1-0))))*1) %></td>
           <td class="c2"><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-ME*0.01)*.99*(1-0))))*1)%></td>
-          <td class="c3"><%- Intl.NumberFormat().format((Math.max(1, Math.ceil( MINERALS[i].quantity *(1-ME*0.01)*.98*(1-0))))*1)%></td>
+          <td class="c3"><%- Intl.NumberFormat().format(Math.max(1, Math.ceil( MINERALS[i].quantity *(1-(ME/100))*.98)*1))%></td>
           </tr>
           <% } %>
+          <%= MINERALS1 %> test
+
           
           </tbody>
             <table class="table">

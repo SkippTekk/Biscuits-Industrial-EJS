@@ -11,6 +11,15 @@ router.get('/', async (req, res, next) => {
        res.sendStatus(500);
    }
 });
+router.get('/allships', async (req, res, next) => {
+    try{
+     let results = await db.shipinfo(req.params.shipinfo);
+         res.json(results);
+    } catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+ });
 router.get('/i/:id', async (req, res, next) => {
     try{
      let results = await db.id(req.params.id);
