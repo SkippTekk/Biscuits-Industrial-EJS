@@ -75,6 +75,17 @@ invtypes.shipinfo = () => {
             });
     });
 };
+invtypes.iteminfo = () => {
+
+    return new Promise((resolve, reject) => {
+            connection.query("SELECT invGroup.`categoryID`, invType.* FROM `invTypes` invType INNER JOIN `invGroups` invGroup ON invGroup.`groupID` = invType.`groupID` WHERE `invGroup`.`categoryID` = '7'", (err, results) => {
+                if(err){
+                    return reject(err);
+                }
+                return resolve(results);
+            });
+    });
+};
 
 module.exports = invtypes;
 
