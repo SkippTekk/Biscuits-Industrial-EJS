@@ -96,40 +96,55 @@ app.get('/login', (req, res) => {
   });
 }
 });
+
+//
+// ALL requests must be terminated!
+//
 // app.post('/login', authController.login);
-app.post('/login', (req, res) => {
+app.post('/login', (req, res, next) => {
   console.log(req.user)
   console.log(req.isAuthenticated)
-  
+
+  return res.status(204).end();
 });
 
 
 //register crap
-app.get('/register', function(req, res,next) {
-
-  res.render('register');
-});
+app.get('/register', function(req, res, next) { res.render('register');});
 app.post('/register', authController.register);
-
-//account seeing
-app.get('/dashboard', authenticationMiddleware, function(req, res, next) {
-  if(req.session.id){
-    res.render('dashboard', {
-      message: req.session.email
-    })
-    console.log('/dashboard error log  ' + req.session.id);
-    
-  }else {
-    res.redirect('login');
-}
-  
-});
 
 //logout of the website
 app.get('/logout',
   function(req, res){
     req.session.destroy();
     res.redirect('/');
+  });
+
+//
+// Checks for authorisation before performing any requests.
+//
+// If the method fails, any function inserted into the stack after will not be called but 
+// but the user will be redirected.
+//
+app.use((req, res, next) => {    
+    if (!req.isAuthenticated()) 
+        return res.redirect('/login');
+
+    return next();
+});
+
+// User dashboard
+app.get('/dashboard', function(req, res, next) {
+    if(req.session.id){
+      res.render('dashboard', {
+        message: req.session.email
+      })
+      console.log('/dashboard error log  ' + req.session.id);
+      
+    }else {
+      res.redirect('login');
+  }
+    
   });
 
 //fucking around with settings shit breaks here
@@ -142,10 +157,10 @@ app.get('/biscuits', function (req, res) {
     db.close();
 });
 
-
 app.get('/ships', function (req, res) {
   res.render('ships')
 });
+
 app.get('/ships/:item', (req, res) => {
     connect.query('SELECT * FROM invTypes WHERE typeName = ?', [req.params.item], function(err, results1){
       if(results1 < 1) {
@@ -176,9 +191,11 @@ app.get('/ships/:item', (req, res) => {
       })}
       });
   });
+
   app.get('/modules', function (req, res) {
     res.render('ships')
   });
+
   app.get('/modules/:item', (req, res) => {
     connect.query('SELECT * FROM invTypes WHERE typeName = ?', [req.params.item], function(err, results1){
       if(results1 < 1) {
@@ -206,9 +223,6 @@ app.get('/ships/:item', (req, res) => {
       }
       });
   });
-
-
-  
   
   //esiil
   const ESIIL = require('esiil')
@@ -252,12 +266,14 @@ app.get('/callback', async (req, res) => {
       res.redirect(`/myassets/${toonID}`)
       console.log(req.query.code)
   });
+
 app.get('/mylp', async (req, res) => {
     myCharacter.lp(toonID)
     .then(res => console.dir(res.body))
     .catch(err => console.error(err))
     res.send('done')
   });
+
 app.get('/myassets/:toonID', async (req, res) => {
     myCharacter.assets(req.params.toonID, { page: 1 })
     .then(res => console.dir(res.body))
@@ -271,6 +287,7 @@ app.get('/getid', async (req, res) => {
           .catch(err => console.error(err))
       res.send('done')
   });
+
   //api shit
 const apiRouter = require('../server/routes');
 const { ESRCH } = require('constants');
@@ -278,13 +295,7 @@ const { ESRCH } = require('constants');
 app.get('/api', function (req, res) {
     res.render('../api')
   });
-app.use('/api/InvTypes', apiRouter)  
-  module.exports = app;
-  function authenticationMiddleware () {  
-    return (req, res, next) => {
-      console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
-  
-        if (req.isAuthenticated()) return next();
-        res.redirect('/login')
-    }
-  }
+
+  app.use('/api/InvTypes', apiRouter);
+
+module.exports = app;
