@@ -38,15 +38,15 @@ router.get('/allitems', async (req, res, next) => {
         res.sendStatus(500);
     }
  });
- router.get('/gsheetbuilding', async (req, res, next) => {
+ router.get('/groupid:id', async (req, res, next) => {
     try{
-     let results = await db.ghseetbuilding(req.params.ghseetbuilding);
-         res.json(results);
+     let results = await db.groupid(req.params.groupid);
+     res.json(results);
     } catch(e){
         console.log(e);
         res.sendStatus(500);
     }
- });
+ }); 
 router.get('/i/:id', async (req, res, next) => {
     try{
      let results = await db.id(req.params.id);
