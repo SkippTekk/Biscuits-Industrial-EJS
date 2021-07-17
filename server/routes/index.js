@@ -38,7 +38,7 @@ router.get('/allitems', async (req, res, next) => {
         res.sendStatus(500);
     }
  });
- router.get('/groupid:id', async (req, res, next) => {
+ router.get('/groupid/:id', async (req, res, next) => {
     try{
      let results = await db.groupid(req.params.groupid);
      res.json(results);
