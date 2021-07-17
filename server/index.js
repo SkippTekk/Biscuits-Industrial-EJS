@@ -108,10 +108,10 @@ invtypes.ghseetbuilding = (gsheet) => {
             });
     });
 };
-invtypes.groupid = (groupID) => {
+invtypes.groupid = (groupid) => {
 
     return new Promise((resolve, reject) => {
-            connection.query(`SELECT * FROM invTypes WHERE groupID = ?`, groupID, (err, results) => {
+            connection.query(`SELECT * FROM invTypes WHERE groupID = ?`, groupid, (err, results) => {
                 if(err){
                     return reject(err);
                 }
