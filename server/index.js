@@ -97,10 +97,10 @@ invtypes.iteminfo = () => {
             });
     });
 };
-invtypes.ghseetbuilding = (ghseetbuilding) => {
+invtypes.ghseetbuilding = (gsheet) => {
 
     return new Promise((resolve, reject) => {
-            connection.query("SELECT m.quantity, i2.typeName FROM industryActivityMaterials m INNER JOIN invTypes i1 ON i1.typeID = m.typeID INNER JOIN invTypes i2 ON i2.typeID = m.materialtypeID INNER JOIN ramActivities i3 ON i3.activityID = m.activityID = 1 WHERE i1.typeName = ? AND m.activityID = 1 ORDER BY m.materialTypeID ASC", ghseetbuilding, (err, results) => {
+            connection.query(`SELECT m.quantity, i2.typeName FROM industryActivityMaterials m INNER JOIN invTypes i1 ON i1.typeID = m.typeID INNER JOIN invTypes i2 ON i2.typeID = m.materialtypeID INNER JOIN ramActivities i3 ON i3.activityID = m.activityID = 1 WHERE i1.typeName = ? AND m.activityID = 1 ORDER BY m.materialTypeID ASC`, gsheet, (err, results) => {
                 if(err){
                     return reject(err);
                 }
@@ -108,7 +108,6 @@ invtypes.ghseetbuilding = (ghseetbuilding) => {
             });
     });
 };
-
 module.exports = invtypes;
 
 // to add shit go to server -> routes -> index.js you dumb fuck (talking to Biscuits, not you public people)
