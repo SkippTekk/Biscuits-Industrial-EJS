@@ -38,15 +38,6 @@ router.get('/allitems', async (req, res, next) => {
         res.sendStatus(500);
     }
  });
- router.get('/groupid/:groupid', async (req, res, next) => {
-    try{
-     let results = await db.groupid(req.params.groupid);
-     res.json(results);
-    } catch(e){
-        console.log(e);
-        res.sendStatus(500);
-    }
- }); 
 router.get('/i/:id', async (req, res, next) => {
     try{
      let results = await db.id(req.params.id);
@@ -77,6 +68,15 @@ router.get('/i/:id', async (req, res, next) => {
  router.get('/g/:ghseetbuilding', async (req, res, next) => {
     try{
      let results = await db.ghseetbuilding(req.params.ghseetbuilding + ` blueprint`);
+     res.json(results);
+    } catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+ });
+ router.get('/groupid/:groupID', async (req, res, next) => {
+    try{
+     let results = await db.groupID(req.params.groupID);
      res.json(results);
     } catch(e){
         console.log(e);
