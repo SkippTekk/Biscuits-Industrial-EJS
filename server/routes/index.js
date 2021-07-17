@@ -74,4 +74,13 @@ router.get('/i/:id', async (req, res, next) => {
         res.sendStatus(500);
     }
  });
+ router.get('/g/:builds', async (req, res, next) => {
+    try{
+     let results = await db.builds(req.params.ghseetbuilding + ` blueprint`);
+     res.json(results);
+    } catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+ });
 module.exports = router;

@@ -97,10 +97,10 @@ invtypes.iteminfo = () => {
             });
     });
 };
-invtypes.ghseetbuilding = () => {
+invtypes.ghseetbuilding = (ghseetbuilding) => {
 
     return new Promise((resolve, reject) => {
-            connection.query("SELECT m.quantity, i2.typeName FROM industryActivityMaterials m INNER JOIN invTypes i1 ON i1.typeID = m.typeID INNER JOIN invTypes i2 ON i2.typeID = m.materialtypeID INNER JOIN ramActivities i3 ON i3.activityID = m.activityID = 1 WHERE i1.typeName = 'Capital Antimatter Reactor Unit blueprint' AND m.activityID = 1 ORDER BY m.materialTypeID ASC", (err, results) => {
+            connection.query("SELECT m.quantity, i2.typeName FROM industryActivityMaterials m INNER JOIN invTypes i1 ON i1.typeID = m.typeID INNER JOIN invTypes i2 ON i2.typeID = m.materialtypeID INNER JOIN ramActivities i3 ON i3.activityID = m.activityID = 1 WHERE i1.typeName = ? AND m.activityID = 1 ORDER BY m.materialTypeID ASC", ghseetbuilding, (err, results) => {
                 if(err){
                     return reject(err);
                 }
