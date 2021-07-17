@@ -75,10 +75,32 @@ invtypes.shipinfo = () => {
             });
     });
 };
+invtypes.playerships = () => {
+
+    return new Promise((resolve, reject) => {
+            connection.query("SELECT typeID,typeName FROM invTypes join invGroups on invTypes.groupID =invGroups.groupID and categoryID=6 where raceID IN (1,2,4,8,128,135) AND invTypes.published = 1", (err, results) => {
+                if(err){
+                    return reject(err);
+                }
+                return resolve(results);
+            });
+    });
+};
 invtypes.iteminfo = () => {
 
     return new Promise((resolve, reject) => {
             connection.query("SELECT invGroup.`categoryID`, invType.* FROM `invTypes` invType INNER JOIN `invGroups` invGroup ON invGroup.`groupID` = invType.`groupID` WHERE `invGroup`.`categoryID` = '7'", (err, results) => {
+                if(err){
+                    return reject(err);
+                }
+                return resolve(results);
+            });
+    });
+};
+invtypes.ghseetbuilding = () => {
+
+    return new Promise((resolve, reject) => {
+            connection.query("SELECT m.quantity, i2.typeName FROM industryActivityMaterials m INNER JOIN invTypes i1 ON i1.typeID = m.typeID INNER JOIN invTypes i2 ON i2.typeID = m.materialtypeID INNER JOIN ramActivities i3 ON i3.activityID = m.activityID = 1 WHERE i1.typeName = 'Capital Antimatter Reactor Unit blueprint' AND m.activityID = 1 ORDER BY m.materialTypeID ASC", (err, results) => {
                 if(err){
                     return reject(err);
                 }

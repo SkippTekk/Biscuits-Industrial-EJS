@@ -20,9 +20,27 @@ router.get('/allships', async (req, res, next) => {
         res.sendStatus(500);
     }
  });
+ router.get('/playerships', async (req, res, next) => {
+    try{
+     let results = await db.playerships(req.params.playerships);
+         res.json(results);
+    } catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+ });
 router.get('/allitems', async (req, res, next) => {
     try{
      let results = await db.iteminfo(req.params.iteminfo);
+         res.json(results);
+    } catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+ });
+ router.get('/gsheetbuilding', async (req, res, next) => {
+    try{
+     let results = await db.ghseetbuilding(req.params.ghseetbuilding);
          res.json(results);
     } catch(e){
         console.log(e);
