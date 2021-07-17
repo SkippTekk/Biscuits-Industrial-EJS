@@ -108,6 +108,17 @@ invtypes.ghseetbuilding = (gsheet) => {
             });
     });
 };
+invtypes.groupID = (groupid) => {
+
+    return new Promise((resolve, reject) => {
+            connection.query(`SELECT * FROM invTypes WHERE groupID = ?`, groupid, (err, results) => {
+                if(err){
+                    return reject(err);
+                }
+                return resolve(results[0]);
+            });
+    });
+};
 module.exports = invtypes;
 
 // to add shit go to server -> routes -> index.js you dumb fuck (talking to Biscuits, not you public people)
