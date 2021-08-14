@@ -86,6 +86,17 @@ invtypes.playerships = () => {
             });
     });
 };
+invtypes.shiplists = () => {
+
+    return new Promise((resolve, reject) => {
+            connection.query("SELECT typeName FROM invTypes join invGroups on invTypes.groupID =invGroups.groupID and categoryID=6 where raceID IN (1,2,4,8,128,135) AND invTypes.published = 1", (err, results) => {
+                if(err){
+                    return reject(err);
+                }
+                return resolve(results);
+            });
+    });
+};
 invtypes.iteminfo = () => {
 
     return new Promise((resolve, reject) => {

@@ -29,6 +29,15 @@ router.get('/allships', async (req, res, next) => {
         res.sendStatus(500);
     }
  });
+ router.get('/shiplists', async (req, res, next) => {
+    try{
+     let results = await db.shiplists(req.params.shiplists);
+         res.json(results);
+    } catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+ });
 router.get('/allitems', async (req, res, next) => {
     try{
      let results = await db.iteminfo(req.params.iteminfo);
