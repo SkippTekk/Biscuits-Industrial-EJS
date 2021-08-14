@@ -94,7 +94,7 @@ router.get('/i/:id', async (req, res, next) => {
  });
  router.get('/reactions/:reactions', async (req, res, next) => {
     try{
-     let results = await db.reactions(req.params.reactions);
+     let results = await db.reactions(req.params.reactions+ `reactiion formula`);
      res.json(results);
     } catch(e){
         console.log(e);
