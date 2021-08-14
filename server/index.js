@@ -130,6 +130,30 @@ invtypes.groupID = (groupid) => {
             });
     });
 };
+invtypes.reactions = (groupid) => {
+
+    return new Promise((resolve, reject) => {
+            connection.query(`select 
+            invTypes1.typeID as outputID, 
+            invTypes1.typeName as outputName,
+            industryActivityProducts.quantity as outputQty,
+            industryActivityMaterials.materialTypeID as inputID,
+            invTypes2.typeName as inputName,
+            industryActivityMaterials.quantity as inputQty
+        from invTypes invTypes1
+        left join industryActivityProducts on invTypes1.typeID = industryActivityProducts.productTypeID 
+        left join industryActivityMaterials on industryActivityProducts.typeID = industryActivityMaterials.typeID 
+        left join invTypes invTypes2 on industryActivityMaterials.materialTypeID = invTypes2.typeID
+        where 
+            invTypes1.published = 1 
+            and industryActivityMaterials.activityID = 1`, groupid, (err, results) => {
+                if(err){
+                    return reject(err);
+                }
+                return resolve(results[0]);
+            });
+    });
+};
 module.exports = invtypes;
 
 // to add shit go to server -> routes -> index.js you dumb fuck (talking to Biscuits, not you public people)

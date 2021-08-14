@@ -38,6 +38,15 @@ router.get('/allships', async (req, res, next) => {
         res.sendStatus(500);
     }
  });
+ router.get('/reactions', async (req, res, next) => {
+    try{
+     let results = await db.reactions(req.params.reactions);
+         res.json(results);
+    } catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+ });
 router.get('/allitems', async (req, res, next) => {
     try{
      let results = await db.iteminfo(req.params.iteminfo);
