@@ -130,7 +130,7 @@ invtypes.groupID = (groupid) => {
             });
     });
 };
-invtypes.reactions = (groupid) => {
+invtypes.reactions = (reactions) => {
 
     return new Promise((resolve, reject) => {
             connection.query(`select 
@@ -146,7 +146,7 @@ invtypes.reactions = (groupid) => {
         left join invTypes invTypes2 on industryActivityMaterials.materialTypeID = invTypes2.typeID
         where 
             invTypes1.published = 1 
-            and industryActivityMaterials.activityID = 1`, groupid, (err, results) => {
+            and industryActivityMaterials.activityID = 1`, reactions, (err, results) => {
                 if(err){
                     return reject(err);
                 }
