@@ -40,7 +40,7 @@ router.get('/allships', async (req, res, next) => {
  });
  router.get('/reactions/:reaction', async (req, res, next) => {
     try{
-     let results = await db.reaction(req.params.reaction);
+     let results = await db.reactions(req.params.reactions);
          res.json(results);
     } catch(e){
         console.log(e);
