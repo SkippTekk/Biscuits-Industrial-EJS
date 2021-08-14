@@ -38,9 +38,9 @@ router.get('/allships', async (req, res, next) => {
         res.sendStatus(500);
     }
  });
- router.get('/reactions', async (req, res, next) => {
+ router.get('/reactions/:reaction', async (req, res, next) => {
     try{
-     let results = await db.reactions(req.params.reactions);
+     let results = await db.reaction(req.params.reaction);
          res.json(results);
     } catch(e){
         console.log(e);

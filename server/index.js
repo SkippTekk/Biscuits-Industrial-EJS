@@ -97,10 +97,10 @@ invtypes.shiplists = () => {
             });
     });
 };
-invtypes.reactions = () => {
+invtypes.reactions = (reaction) => {
 
     return new Promise((resolve, reject) => {
-            connection.query("select invTypes1.typeID as outputID, invTypes1.typeName as outputName, industryActivityProducts.quantity as outputQty, industryActivityMaterials.materialTypeID as inputID, invTypes2.typeName as inputName, industryActivityMaterials.quantity as inputQty from invTypes invTypes1 left join industryActivityProducts on invTypes1.typeID = industryActivityProducts.productTypeID left join industryActivityMaterials on industryActivityProducts.typeID = industryActivityMaterials.typeID left join invTypes invTypes2 on industryActivityMaterials.materialTypeID = invTypes2.typeID where invTypes1.published = 1 and industryActivityMaterials.activityID = 11", (err, results) => {
+            connection.query("SELECT m.materialTypeID, m.quantity, i2.typeName FROM industryActivityMaterials m INNER JOIN invTypes i1 ON i1.typeID = m.typeID INNER JOIN invTypes i2 ON i2.typeID = m.materialtypeID INNER JOIN ramActivities i3 ON i3.activityID = m.activityID = 1 WHERE i1.typeName = ? ORDER BY m.materialTypeID ASC", reaction, (err, results) => {
                 if(err){
                     return reject(err);
                 }
